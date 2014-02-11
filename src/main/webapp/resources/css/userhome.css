@@ -1,0 +1,21 @@
+@CHARSET "ISO-8859-1";
+
+.userheader {
+	font-size:1em;
+	float:right;
+}
+
+#thumbimage {
+	float:right;
+	max-width:150px;
+	max-height:150px;
+}
+
+form {
+	float:left;
+}
+
+img {
+	max-width:50px;
+	max-height:50px;
+}

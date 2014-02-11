@@ -1,0 +1,15 @@
+<aspectj>
+<aspects>
+<aspect name="com.team.project.users.User_Roo_JavaBean"/>
+<aspect name="com.team.project.users.User_Roo_ToString"/>
+<aspect name="com.team.project.users.User_Roo_Configurable"/>
+<aspect name="com.team.project.users.User_Roo_Jpa_Entity"/>
+<aspect name="com.team.project.users.User_Roo_Jpa_ActiveRecord"/>
+<aspect name="com.team.project.users.Role_Roo_Configurable"/>
+<aspect name="com.team.project.users.Role_Roo_Jpa_Entity"/>
+<aspect name="com.team.project.users.Role_Roo_ToString"/>
+<aspect name="com.team.project.users.Role_Roo_Jpa_ActiveRecord"/>
+<aspect name="com.team.project.users.Role_Roo_JavaBean"/>
+</aspects>
+</aspectj>
+
