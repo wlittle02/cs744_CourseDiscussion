@@ -44,17 +44,19 @@ public class RegistrationController {
 			@RequestParam(value = "lastName", required = true) String lastName, 
 			@RequestParam(value = "userName", required = true) String userName,
 			@RequestParam(value = "email", required = true) String email, 
-			@RequestParam(value = "password", required = true) String password,			
+			@RequestParam(value = "password", required = true) String password,	
+			@RequestParam(value = "userroles", required = true) ArrayList<String> userroles,
 			ModelMap model) {
 		password = passwordEncoder.encode(password);	
 		User user =  User.findUserByName(userName);
+		
         
         if (user != null) {        	
         	model.addAttribute("regerror", true);
         	return "register";
             //throw new UsernameNotFoundException("Username already exists");
         }
-
+        
 		user = new User.Builder()
 			.firstName(firstName)
 			.lastName(lastName)
@@ -63,6 +65,14 @@ public class RegistrationController {
 			.password(password)
 			.authorities(new HashSet<Role>())
 			.build();
+		List<Role> roles = getRoles();
+		for (int i = 0; i < getRoles().size(); i++)
+		{
+			if (userroles.contains(roles.get(i).getName()))
+			{
+				user.addRole(roles.get(i));
+			}
+		}
 		
 		userComponent.addUser(user);
 		model.addAttribute("message", "Registration success.");
@@ -70,4 +80,14 @@ public class RegistrationController {
 		return "register";
 	}
 	
+	private List<Role> getRoles()
+	{
+		List<Role> roles = new ArrayList<Role>();
+		for (String rolename : Role.roleNames)
+		{
+			Role role = new Role(rolename);
+			roles.add(role);
+		}
+		return roles;
+	}
 }
