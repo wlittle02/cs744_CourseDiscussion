@@ -211,17 +211,17 @@
 				<div class="col-sm-offset-2 col-sm-10">
 					<div class="checkbox">
     				<label>
-     			 		<input type="checkbox"  name="userroles" value="ROLE_ADMIN"> Manager
+     			 		<input id ="checkmanager" type="checkbox"  name="userroles" value="ROLE_ADMIN"> Manager
     				</label>
     				</div>  
     				<div class="checkbox">
     				<label>
-     			 		<input type="checkbox"  name="userroles" value="ROLE_INSTRUCTOR" > Instructor
+     			 		<input id ="checkinstructor" type="checkbox"  name="userroles" value="ROLE_INSTRUCTOR" > Instructor
     				</label>
     				</div>  
     				<div class="checkbox">
     				<label>
-     			 		<input type="checkbox"  name="userroles" value="ROLE_STUDENT">Student
+     			 		<input id ="checkstudent" type="checkbox"  name="userroles" value="ROLE_STUDENT">Student
     				</label>
     				</div>
 				</div>
@@ -246,6 +246,15 @@
             return true;
         }
         alert("Passwords not same");
+        
+        var manager = document.getElementById('checkmanager');
+        if( document.getElementById('checkmanager').checked 
+        		|| document.getElementById('checkinstructor').checked || document.getElementById('checkstudent').checked ) {
+        			
+            return true;
+        }
+        alert("A Role must be selected");
+        
         return false;
     }
     </script>
