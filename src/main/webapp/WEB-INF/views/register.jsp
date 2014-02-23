@@ -243,17 +243,19 @@
     function validate() {
         var d = document.formregister;
         if((d.password.value != '') && (d.repassword.value == d.password.value)) {
-            return true;
+            var manager = document.getElementById('checkmanager');
+	        if( document.getElementById('checkmanager').checked 
+	        		|| document.getElementById('checkinstructor').checked || document.getElementById('checkstudent').checked ) {
+	        			
+	            return true;
+	        }
+	        alert("A Role must be selected");
         }
-        alert("Passwords not same");
+        else
+        {
+        	alert("Passwords not same");
+        }
         
-        var manager = document.getElementById('checkmanager');
-        if( document.getElementById('checkmanager').checked 
-        		|| document.getElementById('checkinstructor').checked || document.getElementById('checkstudent').checked ) {
-        			
-            return true;
-        }
-        alert("A Role must be selected");
         
         return false;
     }
