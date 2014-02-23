@@ -166,7 +166,7 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">Modifying User Details</h1>
                 </div>
-                <form name="formupdate" class="form-horizontal" role="form" action="<c:url value="/update?username=${user.username}"/>" method="post">
+                <form name="formupdate" class="form-horizontal" role="form" action="<c:url value="/update?username=${user.username}"/>" method="post" onsubmit="return validate();">
 			<div class="form-group">
 				<label for="firstname" class="col-sm-2 control-label">First Name *</label>
 				<div class="col-sm-6">
@@ -212,19 +212,19 @@
 				<div class="col-sm-offset-2 col-sm-10">
       				<div class="checkbox">
     				<label>
-     			 		<input type="checkbox"  name="userroles" value="ROLE_ADMIN"
+     			 		<input id ='checkmanager' type="checkbox"  name="userroles" value="ROLE_ADMIN"
      			 		<c:if test="${manager == 'true'}">checked="checked"</c:if> > Manager
     				</label>
     				</div>  
     				<div class="checkbox">
     				<label>
-     			 		<input type="checkbox"  name="userroles" value="ROLE_INSTRUCTOR" 
+     			 		<input id ='checkinstructor' type="checkbox"  name="userroles" value="ROLE_INSTRUCTOR" 
      			 		<c:if test="${instructor == 'true'}">checked="checked"</c:if> > Instructor
     				</label>
     				</div>  
     				<div class="checkbox">
     				<label>
-     			 		<input type="checkbox"  name="userroles" value="ROLE_STUDENT"
+     			 		<input id ='checkstudent' type="checkbox"  name="userroles" value="ROLE_STUDENT"
      			 		<c:if test="${student == 'true'}">checked="checked"</c:if> >Student
     				</label>
     				</div>    	
@@ -263,7 +263,19 @@
     <script src="resources/js/js/sb-admin.js"></script>
 
     <!-- Page-Level Demo Scripts - Blank - Use for reference -->
-
+    <script type="text/javascript">
+ 	function validate() {
+        
+        var manager = document.getElementById('checkmanager');
+        if( document.getElementById('checkmanager').checked 
+        		|| document.getElementById('checkinstructor').checked || document.getElementById('checkstudent').checked ) {
+        			
+            return true;
+        }
+        alert("A Role must be selected");
+        return false;
+    }
+    </script>
 </body>
 
 </html>
