@@ -112,7 +112,7 @@
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
-                    <li>
+    <!--                 <li>
                         <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -137,11 +137,11 @@
                                         <a href="#">Third Level Item</a>
                                     </li>
                                 </ul>
-                                <!-- /.nav-third-level -->
+                                /.nav-third-level
                             </li>
                         </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                        /.nav-second-level
+                    < /li> -->
 <!--                     <li class="active"> -->
 <!--                         <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a> -->
 <!--                         <ul class="nav nav-second-level"> -->
@@ -232,8 +232,10 @@
 						</c:choose>
 						<td><a href="modify?username=${user.username}">
 						<img border="0" src="<c:url value="/resources/images/pencil_2.png"/>" alt="Delete" width="20" height="20"></a></td>
-						<td><a href="delete?username=${user.username}">
-						<img border="0" src="<c:url value="/resources/images/button_cancel.png"/>" alt="Delete" width="20" height="20"></a></td>
+						<c:if test="${user.username != loginuser}">
+							<td><a href="delete?username=${user.username}">
+							<img border="0" src="<c:url value="/resources/images/button_cancel.png"/>" alt="Delete" width="20" height="20"></a></td>
+						</c:if>
 					</tr>
 				</c:forEach>
 			</table>

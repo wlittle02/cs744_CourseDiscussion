@@ -112,7 +112,7 @@
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
-                    <li>
+     <!--                <li>
                         <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -137,11 +137,11 @@
                                         <a href="#">Third Level Item</a>
                                     </li>
                                 </ul>
-                                <!-- /.nav-third-level -->
+                                /.nav-third-level
                             </li>
                         </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                        /.nav-second-level
+                    </li> -->
 <!--                     <li class="active"> -->
 <!--                         <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a> -->
 <!--                         <ul class="nav nav-second-level"> -->
