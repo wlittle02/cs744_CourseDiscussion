@@ -45,17 +45,17 @@ public class UserHomeController {
 	
 	
 	@RequestMapping(value = "/home")
-		public String home(ModelMap model, Principal principal) {
+		public String home(@RequestParam(value = "role", required = true) String role,ModelMap model, Principal principal) {
 		System.out.println(principal.getName());		
 		//updateModel(principal, model,date, false);
 		Set<String> roles = AuthorityUtils
                 .authorityListToSet(SecurityContextHolder.getContext()
                         .getAuthentication().getAuthorities());
 		System.out.println(roles);
-		 if (roles.contains("ROLE_ADMIN")) {	
+		 if (role.equalsIgnoreCase("ROLE_ADMIN")) {	
 	            return "base";
 	        }	
-		 if (roles.contains("ROLE_INSTRUCTOR")) {	
+		 if (role.equalsIgnoreCase("ROLE_INSTRUCTOR")) {	
 	            return "instructor";
 	        }
 		return "student";
@@ -63,9 +63,11 @@ public class UserHomeController {
 	
 	@RequestMapping(value = "/viewusers")
 	public String viewallusers(String date,ModelMap model, Principal principal) {
-		
+			
 		List<User> users = userComponent.getAllUsers(); 	
 	 	model.addAttribute("users", users);
+	 	String loginuser = principal.getName();	
+	 	model.addAttribute("loginuser",loginuser);
 	 	return "viewallusers";
 	}
 	
@@ -75,6 +77,8 @@ public class UserHomeController {
 			
 		User user = userComponent.loadUserByUsername(username);
 		model.addAttribute("user", user);
+		String loginuser = principal.getName();	
+	 	model.addAttribute("loginuser",loginuser);
 		return "modifyuser";
 	}
 	
