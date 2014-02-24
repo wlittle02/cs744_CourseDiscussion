@@ -1,5 +1,9 @@
 package com.ocds.controllers;
 
+import java.util.Set;
+
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +27,14 @@ public class LoginController {
 		if(isError != null && isError) {
 			model.addAttribute("error", isError);
 		}
+		if(isError != null && !isError) {
+			model.addAttribute("error", isError);
+			Set<String> roles = AuthorityUtils
+	                .authorityListToSet(SecurityContextHolder.getContext()
+	                        .getAuthentication().getAuthorities());
+			model.addAttribute("roles",roles);
+		}
+		
 		return "login";
 	}	
 }
