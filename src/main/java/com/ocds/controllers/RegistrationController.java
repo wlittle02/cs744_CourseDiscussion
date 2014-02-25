@@ -75,7 +75,7 @@ public class RegistrationController {
 		}
 		
 		userComponent.addUser(user);
-		model.addAttribute("message", "Registration success.");
+		model.addAttribute("success", true);
 		
 		return "register";
 	}
