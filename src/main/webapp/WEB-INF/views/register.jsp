@@ -161,6 +161,10 @@
         <!-- /.navbar-static-side -->
 
         <div id="page-wrapper">
+        <br/>
+        <c:if test="${success}">
+     			 <h3><i>User successfully registered.</i></h3>
+      		</c:if>  
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Register New User</h1>
@@ -201,13 +205,13 @@
 				</div>	
 			</div>			
 			<div class="form-group">
-				<label for="emailInput" class="col-sm-2 control-label">Email Address</label>
+				<label for="emailInput" class="col-sm-2 control-label">Email Address *</label>
 				<div class="col-sm-6">
 					<input name="email" id="emailInput" type="email" class="form-control" required/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="userSelection" class="col-sm-2 control-label">User Roles</label>
+				<label for="userSelection" class="col-sm-2 control-label">User Roles *</label>
 				<div class="col-sm-offset-2 col-sm-10">
 					<div class="checkbox">
     				<label>
