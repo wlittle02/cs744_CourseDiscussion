@@ -29,7 +29,7 @@
 	<h1 align="center">Online Course Discussion System</h1>
     <div class="container container1" >    
      <div class="content">     
-     <c:if test ="${error == null}">   
+     <c:if test ="${error == null || error=='true'}">   
       <form class="form-signin" action="<c:url value="/j_spring_security_check"/>" method="post">
         <h2 class="form-signin-heading">Login</h2>
         <input type="text" class="form-control" placeholder="User Name" autofocus name="j_username" required>   
@@ -80,7 +80,7 @@
        </div>
     </div> 
 
-    <a href="<c:url value="/setup"/>">Setup Mock Data</a>  
+      <!-- <a href="<c:url value="/setup"/>">Setup Mock Data</a> -->
     <!-- /container -->
 
 

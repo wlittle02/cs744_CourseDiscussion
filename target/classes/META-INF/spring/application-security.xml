@@ -22,7 +22,7 @@
 		<security:intercept-url pattern="/**"
 			access="isAuthenticated()" />
 		<security:form-login login-page="/login"
-			always-use-default-target="true" default-target-url="/home"
+			always-use-default-target="true" default-target-url="/login?error=false"
 			login-processing-url="/j_spring_security_check"
 			authentication-failure-url="/login?error=true" />
 		<security:logout logout-url="/logout" />
