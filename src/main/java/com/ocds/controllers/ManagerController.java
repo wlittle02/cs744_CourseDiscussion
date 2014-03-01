@@ -1,7 +1,6 @@
 package com.ocds.controllers;
 
 import java.security.Principal;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ocds.Dao.CourseComponent;
 import com.ocds.Domain.Course;
-import com.ocds.Domain.CourseComponent;
-import com.ocds.users.User;
 
 @Controller
 public class ManagerController {
@@ -25,6 +23,12 @@ public class ManagerController {
 	public  ManagerController() { 
 		System.out.println("CREATING Manager CONTROLLER");
 	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String test() {
+		return "test";
+	}
+	
 	@RequestMapping(value = "/register_course", method = RequestMethod.GET)
 	public String courseRegister() {
 		return "course_register";
