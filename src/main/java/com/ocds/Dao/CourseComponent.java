@@ -1,4 +1,4 @@
-package com.ocds.Domain;
+package com.ocds.Dao;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ocds.users.User;
+import com.ocds.Domain.Course;
 
 
 @Component
