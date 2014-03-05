@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ocds.Dao.CourseComponent;
 import com.ocds.Domain.Course;
+import com.ocds.users.User;
 
 @Controller
 public class ManagerController {
@@ -26,11 +27,13 @@ public class ManagerController {
 	
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test() {
-		return "test";
+		return "course_enrollment";
 	}
 	
+	//Begin of Course
 	@RequestMapping(value = "/register_course", method = RequestMethod.GET)
-	public String courseRegister() {
+	public String courseRegister(ModelMap model) {
+		model.addAttribute("instructors",coursecomponent.getAllInstructor());
 		return "course_register";
 	}
 	
@@ -40,16 +43,19 @@ public class ManagerController {
 			@RequestParam(value = "year", required = true) String year,
 			@RequestParam(value = "semester", required = true) String semester,
 			@RequestParam(value = "state", required = true) String state,
+			@RequestParam(value = "id_num", required = true) String id_num,
+			@RequestParam(value = "section_num", required = true) int section_num,
+			@RequestParam(value = "instructor_id", required = true) int instructor_id,
 			ModelMap model) {
-		Course course = new Course(name,year,semester,state);
-		if (coursecomponent.findCourseByName(name).size() != 0){
+		User instrutor = coursecomponent.getInstructorByID(instructor_id);
+		Course course = new Course(name,year,semester,state,id_num,section_num,instrutor);
+		if (coursecomponent.findCourseByName_Section(id_num,section_num).size() != 0){
 			model.addAttribute("error", true);
 			return "course_register";
-		}else
+		}else{
 			coursecomponent.addCourse(course);
 			return "redirect:/view_course";
-		//coursecomponent.addCourse(course);
-		
+		}
 	}
 	
 	@RequestMapping(value = "/view_course")
@@ -110,4 +116,5 @@ public class ManagerController {
 	 	model.addAttribute("loginuser",loginuser);
 		return "redirect:/view_course";
 	}
+	//End of Course
 }
