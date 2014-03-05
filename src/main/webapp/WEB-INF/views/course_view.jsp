@@ -1,26 +1,39 @@
 <%@ include file="manager_base.jsp"%>
 
+
+
 <!-- Right Block Start -->
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">Course List</h1>
-			<table class="table table-striped table-bordered">
+			<table class="table table-striped table-bordered" align="center">
 				<tr>
+					<th align="center">Course ID</th>
 					<th>Course Name</th>
+					<th>Section</th>
 					<th>Year</th>
 					<th>Semester</th>
 					<th>State</th>
+					<th>Instructor</th>
+					<th>Student</th>
 					<th>Modify</th>
 					<th>Delete</th>
 				</tr>
 				<c:forEach items="${courses}" var="course">
 					<tr>
+						<td><c:out value="${course.id_num}" /></td>
 						<td><c:out value="${course.name}" /></td>
+						<td><c:out value="${course.section_num}" /></td>
 						<td><c:out value="${course.year}" /></td>
 						<td><c:out value="${course.semester}" /></td>
 						<td><c:out value="${course.state}" /></td>
-
+						
+						<td>
+						<c:out value="${course.instructor.firstName}  ${course.instructor.lastName}" />
+						</td>
+						<td><a href="enroll_stu_courses?id=${course.id}">Students </a></td>
+						
 						<td><a href="modify_courses?id=${course.id}"> <img
 								border="0" src="<c:url value="/resources/images/pencil_2.png"/>"
 								alt="Delete" width="20" height="20"></a></td>
@@ -45,3 +58,4 @@
 	<!-- /.row -->
 </div>
 <!-- Right Block ends -->
+

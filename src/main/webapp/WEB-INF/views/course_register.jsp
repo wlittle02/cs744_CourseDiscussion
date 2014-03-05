@@ -10,10 +10,26 @@
 			action="<c:url value="/register_course"/>" method="post"
 			onsubmit="return validate();">
 			<div class="form-group">
+				<label for="id_num" class="col-sm-2 control-label">Course ID
+					*</label>
+				<div class="col-sm-6">
+					<input name="id_num" id="id_num" type="text" class="form-control"
+						required />
+				</div>
+			</div>
+			<div class="form-group">
 				<label for="name" class="col-sm-2 control-label">Course Name
 					*</label>
 				<div class="col-sm-6">
 					<input name="name" id="name" type="text" class="form-control"
+						required />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="section_num" class="col-sm-2 control-label">Section
+					*</label>
+				<div class="col-sm-6">
+					<input name="section_num" id="section_num" type="text" class="form-control"
 						required />
 				</div>
 			</div>
@@ -44,9 +60,20 @@
 				</div>
 			</div>
 
+			<div class="form-group">
+				<label for="instructor_id" class="col-sm-2 control-label">Instructor
+					*</label>
+				<div class="col-sm-6">
+					<select name="instructor_id" id="instructor_id" class="form-control" required>
+						<c:forEach items="${instructors}" var="ins">
+							<option value="${ins.id}">${ins.firstName} ${ins.lastName} </option>
+						</c:forEach>
+					</select>
+				</div>
+			</div>
 
 			<div class="form-group">
-				<label for="state" class="col-sm-2 control-label">State *</label>
+				<label for="state" class="col-sm-2 control-label">Status *</label>
 				<div class="col-sm-6">
 					<select name="state" id="state" class="form-control" required>
 						<option value="Open">Open</option>

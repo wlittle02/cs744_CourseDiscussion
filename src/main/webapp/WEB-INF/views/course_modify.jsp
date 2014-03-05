@@ -8,16 +8,33 @@
 				<form name="formregister" class="form-horizontal" role="form"
 					action="<c:url value="/modify_courses"/>" method="post"
 					onsubmit="return validate();">
-					<input name="id" type=hidden value ="${course.id}"/>
+					<input name="id" type=hidden value ="${course.id}"/>			
+					
+					<div class="form-group">
+						<label for="id_num" class="col-sm-2 control-label">User
+							Name *</label>
+						<div class="col-sm-6">
+							<input name="id_num" id="id_num" type="text"
+								class="form-control" value="${course.id_num}" disabled />
+						</div>
+					</div>
+					
 					<div class="form-group">
 						<label for="name" class="col-sm-2 control-label">Course
 							Name *</label>
 						<div class="col-sm-6">
-							 <input name="name" type=hidden value ="${course.name}"/>
-							<div > ${course.name}</div>
+							 <input name="name" value ="${course.name}" type="text" class="form-control"
+								required />
 						</div>
 					</div>
-					
+					<div class="form-group">
+						<label for="section_num" class="col-sm-2 control-label">Section
+							*</label>
+						<div class="col-sm-6">
+							<input name="section_num" id="section_num" value ="${course.section_num}" type="text" class="form-control"
+								required />
+						</div>
+					</div>
 					<div class="form-group">
 						<label for="year" class="col-sm-2 control-label">Year *</label>
 						<div class="col-sm-6">
