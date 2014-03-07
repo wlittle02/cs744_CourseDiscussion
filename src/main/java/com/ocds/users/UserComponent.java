@@ -32,7 +32,7 @@ public class UserComponent implements UserDetailsService {
     		user.setAuthorities(new HashSet<Role>());
     	}    	
 
-    	user.persist();
+    	user.merge();
     	
     	if(user.getAuthorities().isEmpty()) {
     		Role role = Role.findRole(2L);    		
