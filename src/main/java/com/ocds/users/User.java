@@ -18,6 +18,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.ocds.Domain.Course;
+
 
 
 
@@ -199,5 +201,23 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return this.enabled;
 	}
+	
+	
+	
+	//Gong's adding
+	
+	/*private Set<Course> courses = new HashSet<Course>();
+
+	
+	@ManyToMany(mappedBy="user")
+	public Set<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Course> courses) {
+		this.courses = courses;
+	}*/
+	
+	
 	
 }
