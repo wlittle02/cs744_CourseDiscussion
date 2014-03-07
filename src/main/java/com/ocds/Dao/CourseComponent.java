@@ -1,6 +1,8 @@
 package com.ocds.Dao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,7 +27,9 @@ public class CourseComponent {
 	public void addCourse(Course course){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();  
+		
 		entitymanager.merge(course); 
+		
 		entitymanager.getTransaction().commit();  
 		entitymanager.close(); 
 	}
@@ -105,10 +109,27 @@ public class CourseComponent {
 		return list; 
 	}	
 	
-	public void updateCourse(Course course){
+	public void updateCourse(int course_id,String name,String year,
+			String semester,String state,int section_num,int instructor_id){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();  
-		entitymanager.merge(course); 
+		
+		Course course = entitymanager.createQuery("SELECT course FROM Course course where course.id = ?1", Course.class).setParameter(1, course_id)
+				.getResultList().get(0);
+		course.setName(name);
+		course.setYear(year);
+		course.setSemester(semester);
+		course.setState(state);
+		course.setSection_num(section_num);
+		
+		User instructor = entitymanager.createQuery("SELECT user FROM User user where id = ?1", User.class)
+				.setParameter(1, Long.valueOf(instructor_id)).getResultList().get(0);
+		
+		entitymanager.refresh(instructor);
+		
+		course.setInstructor(instructor);
+		entitymanager.merge(course);
+		
 		entitymanager.getTransaction().commit();  
 		entitymanager.close(); 
 	}
@@ -120,6 +141,9 @@ public class CourseComponent {
 		entitymanager.getTransaction().commit();  
 		entitymanager.close(); 
 	}
+	
+	
+	
 	
 	/*this inappropriate to be here
 	It's supposed to implentment at UserComponent
@@ -136,7 +160,43 @@ public class CourseComponent {
 		return list;
 	}
 	
-	public User getInstructorByID(int id){
+	public List<User> getAllStudent(){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();  
+		
+		List<User> list = entitymanager.createQuery
+				("SELECT user FROM User user JOIN user.authorities ua where ua.id = 3", User.class)
+				.getResultList();
+		entitymanager.getTransaction().commit();  
+		entitymanager.close(); 
+		return list;
+	} 
+	
+	public List<User> getAllUnenrolled(int course_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin(); 
+		
+		List<User> all = entitymanager.createQuery
+				("SELECT user FROM User user JOIN user.authorities ua where ua.id = 3", User.class)
+				.getResultList();
+		Set<User> enrolled = findCourseByID(course_id).getStudents();
+		
+		for(int i=0; i<all.size(); i++){
+			for(User u : enrolled){
+				if(u.getId() == all.get(i).getId()){
+					all.remove(i);
+					i--;
+					break;
+				}	
+			}
+		}
+		
+		entitymanager.getTransaction().commit();  
+		entitymanager.close(); 
+		return all;
+	}
+	
+	public User getUserByID(int id){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();
 		
@@ -144,13 +204,81 @@ public class CourseComponent {
 				("SELECT user FROM User user where id = ?1", User.class)
 				.setParameter(1, Long.valueOf(id)).getResultList();
 		
+		
+		
 		entitymanager.getTransaction().commit();
 		entitymanager.close();
+		
 		if (list.size() != 1)
 			return null;
 		else
 			return list.get(0);
 	}
+	
+	public List<User> getUserListByID(List<Long> ids){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		List<User> list = entitymanager.createQuery
+				("SELECT user FROM User user WHERE id IN ?1", User.class)
+				.setParameter(1, ids).getResultList();
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		
+		return list;
+	}
+	
+	public void enrollStudentToCourse(int course_id, List<Long> student_ids){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		List<User> students = entitymanager.createQuery
+				("SELECT user FROM User user WHERE id IN ?1", User.class)
+				.setParameter(1, student_ids).getResultList();
+		
+		Course course = entitymanager.createQuery
+				("SELECT course FROM Course course where course.id = ?1", Course.class)
+				.setParameter(1, course_id).getResultList().get(0);
+		
+		for(User u : students){
+			entitymanager.refresh(u);
+			course.getStudents().add(u);
+		}
+		
+		entitymanager.merge(course);
+		
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		
+	}
+	
+	public void removeStudentFromCourse(int course_id, List<Long> student_ids){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		List<User> students = entitymanager.createQuery
+				("SELECT user FROM User user WHERE id IN ?1", User.class)
+				.setParameter(1, student_ids).getResultList();
+		
+		Course course = entitymanager.createQuery
+				("SELECT course FROM Course course where course.id = ?1", Course.class)
+				.setParameter(1, course_id).getResultList().get(0);
+		
+		for(User u : students){
+			entitymanager.refresh(u);
+			course.getStudents().remove(u);
+		}
+		
+		entitymanager.merge(course);
+		
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		
+	}
+	
 	
 	/*public void test(){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
