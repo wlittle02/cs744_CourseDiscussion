@@ -46,8 +46,8 @@ public class ManagerController {
 		}
 		
 		STATUS = new String[2];
-		STATUS[0] = "Open";
-		STATUS[1] = "Closed";
+		STATUS[0] = "Active";
+		STATUS[1] = "Incctive";
 		
 		SEMESTERS = new String[4];
 		SEMESTERS[0] = "Spring";
@@ -58,6 +58,7 @@ public class ManagerController {
 	
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test() {
+		System.out.println(coursecomponent.getCourseListForStudent("chen.gong"));
 		return "course_enrollment";
 	}
 	
@@ -118,7 +119,6 @@ public class ManagerController {
 			
 		Course course = coursecomponent.findCourseByID(id);
 		List<User> instructors = coursecomponent.getAllInstructor();
-		System.out.println(instructors.size());
 		Set<User> students = course.getStudents(); 
 		
 		for(User stu : students){
@@ -137,13 +137,11 @@ public class ManagerController {
 		model.addAttribute("instructors",instructors);
 		model.addAttribute("course", course);
 		
-		String loginuser = (String)session.getAttribute("loginuser");
-		System.out.println(loginuser);
+		//String loginuser = (String)session.getAttribute("loginuser");
 		return "course_modify";
 	}
 	
 	@RequestMapping(value = "/modify_courses", method = RequestMethod.POST)
-	@Secured(value = { "ROLE_ADMIN" })
 	public String courseModify(
 			@RequestParam(value = "id", required = true) int id, 
 			//@RequestParam(value = "name", required = true) String name, 
@@ -153,7 +151,7 @@ public class ManagerController {
 			//@RequestParam(value = "id_num", required = true) String id_num,
 			//@RequestParam(value = "section_num", required = true) int section_num,
 			@RequestParam(value = "instructor_id", required = true) int instructor_id,
-			Principal principal, ModelMap model) {
+			HttpSession session, ModelMap model) {
 		
 		coursecomponent.updateCourse(id, year,
 				semester,state, instructor_id);
@@ -163,7 +161,6 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/delete_course")
-	@Secured(value = { "ROLE_ADMIN" })
 	public String deleteCourse(
 			@RequestParam(value = "id", required = true) int id, 
 			HttpSession session, ModelMap model) {
@@ -178,10 +175,9 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/enrollstudent_course", method = RequestMethod.GET)
-	@Secured(value = { "ROLE_ADMIN" })
 	public String enrollStudent(
 			@RequestParam(value = "id", required = true) int id, 
-			Principal principal, ModelMap model) {
+			HttpSession session, ModelMap model) {
 			
 		Course course = coursecomponent.findCourseByID(id);
 		List<User> unenrolled = coursecomponent.getAllUnenrolled(id);
@@ -191,11 +187,10 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/enrollstudent_course", method = RequestMethod.POST)
-	@Secured(value = { "ROLE_ADMIN" })
 	public String enrollStuden(
 			@RequestParam(value = "id", required = true) int id, 
 			@RequestParam(value = "to_enroll", required = true) List<Long> student_ids, 
-			Principal principal, ModelMap model) {
+			HttpSession session, ModelMap model) {
 			
 
 		coursecomponent.enrollStudentToCourse(id, student_ids);
@@ -204,26 +199,13 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/removestudent_course", method = RequestMethod.POST)
-	@Secured(value = { "ROLE_ADMIN" })
 	public String removeStudent(
 			@RequestParam(value = "id", required = true) int id, 
 			@RequestParam(value = "to_remove", required = true) List<Long> student_ids, 
-			Principal principal, ModelMap model) {
+			HttpSession session, ModelMap model) {
 			
-		/*Course course = coursecomponent.findCourseByID(id);
-		//List<User> studenttoenroll = coursecomponent.getUserListByID(student_ids);
-		for(Integer sid : student_ids){
-			course.getStudents().add(coursecomponent.getUserByID(sid));
-		}
-		System.out.println(course.getStudents().size());*/
 		coursecomponent.removeStudentFromCourse(id, student_ids);
 		
-		//System.out.println(studenttoenroll.get(0).getId());
-		
-		/*List<User> unenrolled = coursecomponent.getAllUnenrolled(id);
-		System.out.println(unenrolled.size());
-		model.addAttribute("course", course);
-		model.addAttribute("not_enrolled",unenrolled);*/
 		return "redirect:/enrollstudent_course?id=" + id;
 	}
 	
