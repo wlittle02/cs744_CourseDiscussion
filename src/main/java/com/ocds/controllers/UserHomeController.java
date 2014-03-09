@@ -12,9 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.HttpEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
@@ -43,8 +46,8 @@ public class UserHomeController {
 	}
 	/** To update the model  **/
 	
-	
-	@RequestMapping(value = "/home")
+	// Removed as the login screen was changed to have only one page
+	/*@RequestMapping(value = "/home")
 		public String home(@RequestParam(value = "role", required = true) String role,ModelMap model, Principal principal) {
 		System.out.println(principal.getName());		
 		//updateModel(principal, model,date, false);
@@ -59,32 +62,32 @@ public class UserHomeController {
 	            return "instructor";
 	        }
 		return "student";
-	}
+	}*/
 	
 	@RequestMapping(value = "/viewusers")
-	public String viewallusers(String date,ModelMap model, Principal principal) {
+	public String viewallusers(ModelMap model, HttpSession session) {
 			
 		List<User> users = userComponent.getAllUsers(); 	
-	 	model.addAttribute("users", users);
-	 	String loginuser = principal.getName();	
+	 	model.addAttribute("users", users);	 	
+	 	String loginuser = (String) session.getAttribute( "loginuser" );
 	 	model.addAttribute("loginuser",loginuser);
 	 	return "viewallusers";
 	}
 	
 	@RequestMapping(value = "/modify")
 	@Secured(value = { "ROLE_ADMIN" })
-	public String deleteUser(@RequestParam(value = "username", required = true) String username, Principal principal, ModelMap model) {
+	public String deleteUser(@RequestParam(value = "username", required = true) String username,HttpSession session, ModelMap model) {
 			
 		User user = userComponent.loadUserByUsername(username);
 		model.addAttribute("user", user);
-		String loginuser = principal.getName();	
+		String loginuser = (String) session.getAttribute( "loginuser" );
 	 	model.addAttribute("loginuser",loginuser);
 		return "modifyuser";
 	}
 	
 	@RequestMapping(value = "/delete")
 	@Secured(value = { "ROLE_ADMIN" })
-	public String modifyUser(@RequestParam(value = "username", required = true) String username, Principal principal, ModelMap model) {			
+	public String modifyUser(@RequestParam(value = "username", required = true) String username,  ModelMap model) {			
 		userComponent.deleteUser(username);
 		return "redirect:/viewusers";
 	}

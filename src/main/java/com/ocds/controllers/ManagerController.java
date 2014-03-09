@@ -3,6 +3,8 @@ package com.ocds.controllers;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -74,14 +76,14 @@ public class ManagerController {
 	@Secured(value = { "ROLE_ADMIN" })
 	public String courseModify(
 			@RequestParam(value = "id", required = true) int id, 
-			Principal principal, ModelMap model) {
+			HttpSession session, ModelMap model) {
 			
 		Course course = coursecomponent.findCourseByID(id);
 		
 		model.addAttribute("instructors",coursecomponent.getAllInstructor());
 		model.addAttribute("course", course);
 		
-		String loginuser = principal.getName();	
+		String loginuser = (String) session.getAttribute( "loginuser" );
 		return "course_modify";
 	}
 	
@@ -109,13 +111,13 @@ public class ManagerController {
 	@Secured(value = { "ROLE_ADMIN" })
 	public String deleteCourse(
 			@RequestParam(value = "id", required = true) int id, 
-			Principal principal, ModelMap model) {
+			HttpSession session, ModelMap model) {
 			
 		Course course = coursecomponent.findCourseByID(id);
 		
 		coursecomponent.deleteCourse(course);
 		
-		String loginuser = principal.getName();	
+		String loginuser = (String) session.getAttribute( "loginuser" );
 	 	model.addAttribute("loginuser",loginuser);
 		return "redirect:/view_course";
 	}

@@ -279,7 +279,29 @@ public class CourseComponent {
 		
 	}
 	
+	public List<Course> getAllCoursesforInstructor(User instructor){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();  
+		List<Course> courses = entitymanager.createQuery("SELECT course FROM Course course where course.instructor = ?1", Course.class)
+				.setParameter(1, instructor).getResultList();
+		entitymanager.getTransaction().commit();  
+		entitymanager.close(); 
+		
+		
+		return courses;
+	}
 	
+	public List<Course> getAllCoursesforStudent(User student){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();  
+		List<Course> courses = entitymanager.createQuery("SELECT course FROM Course course JOIN course.students where ?1 in course.students", Course.class)
+				.setParameter(1, student).getResultList();
+		entitymanager.getTransaction().commit();  
+		entitymanager.close(); 
+		
+		
+		return courses;
+	}
 	/*public void test(){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();  
