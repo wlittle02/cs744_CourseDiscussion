@@ -1,7 +1,9 @@
 package com.ocds.controllers;
 
 import java.security.Principal;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,11 +22,38 @@ import com.ocds.users.User;
 @Controller
 public class ManagerController {
 	
+	private static int[] YEARS;
+	private static int[] SECTIONS;
+	private static String[] STATUS;
+	private static String[] SEMESTERS;
+	
 	@Autowired
 	private CourseComponent coursecomponent;
 	
 	public  ManagerController() { 
 		System.out.println("CREATING Manager CONTROLLER");
+		
+		Calendar c = Calendar.getInstance();
+		int current_year = c.get(Calendar.YEAR);
+		YEARS = new int[3];
+		YEARS[0] = current_year;
+		YEARS[1] = current_year + 1;
+		YEARS[2] = current_year + 2;
+		
+		SECTIONS = new int[5];
+		for(int i=0; i<5; i++){
+			SECTIONS[i] = i+1;
+		}
+		
+		STATUS = new String[2];
+		STATUS[0] = "Open";
+		STATUS[1] = "Closed";
+		
+		SEMESTERS = new String[4];
+		SEMESTERS[0] = "Spring";
+		SEMESTERS[1] = "Summer";
+		SEMESTERS[2] = "Fall";
+		SEMESTERS[3] = "Winter";
 	}
 	
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
@@ -36,9 +65,12 @@ public class ManagerController {
 	@RequestMapping(value = "/register_course", method = RequestMethod.GET)
 	public String courseRegister(ModelMap model) {
 		
+		model.addAttribute("years",YEARS);
+		model.addAttribute("sections",SECTIONS);
+		model.addAttribute("status",STATUS);
+		model.addAttribute("semesters",SEMESTERS);
 		
 		model.addAttribute("instructors",coursecomponent.getAllInstructor());
-		
 		
 		return "course_register";
 	}
@@ -56,11 +88,18 @@ public class ManagerController {
 		User instrutor = coursecomponent.getUserByID(instructor_id);
 		Course course = new Course(name,year,semester,state,id_num,section_num,instrutor);
 		if (coursecomponent.findCourseByName_Section(id_num,section_num).size() != 0){
+			model.addAttribute("years",YEARS);
+			model.addAttribute("sections",SECTIONS);
+			model.addAttribute("status",STATUS);
+			model.addAttribute("semesters",SEMESTERS);	
+			model.addAttribute("instructors",coursecomponent.getAllInstructor());
 			model.addAttribute("error", true);
 			return "course_register";
 		}else{
 			coursecomponent.addCourse(course);
-			return "redirect:/view_course";
+			return "redirect:/enrollstudent_course?id="
+					+coursecomponent.findCourseByName_Section(
+							course.getId_num(),course.getSection_num()).get(0).getId();
 		}
 	}
 	
@@ -73,17 +112,33 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/modify_courses", method = RequestMethod.GET)
-	@Secured(value = { "ROLE_ADMIN" })
 	public String courseModify(
 			@RequestParam(value = "id", required = true) int id, 
 			HttpSession session, ModelMap model) {
 			
 		Course course = coursecomponent.findCourseByID(id);
+		List<User> instructors = coursecomponent.getAllInstructor();
+		System.out.println(instructors.size());
+		Set<User> students = course.getStudents(); 
 		
-		model.addAttribute("instructors",coursecomponent.getAllInstructor());
+		for(User stu : students){
+			for(User ins : instructors){
+				if(ins.getId() == stu.getId()){
+					instructors.remove(ins);
+					break;
+				}
+			}
+		}
+		
+		model.addAttribute("years",YEARS);
+		model.addAttribute("status",STATUS);
+		model.addAttribute("semesters",SEMESTERS);
+		
+		model.addAttribute("instructors",instructors);
 		model.addAttribute("course", course);
 		
-		String loginuser = (String) session.getAttribute( "loginuser" );
+		String loginuser = (String)session.getAttribute("loginuser");
+		System.out.println(loginuser);
 		return "course_modify";
 	}
 	
@@ -91,17 +146,17 @@ public class ManagerController {
 	@Secured(value = { "ROLE_ADMIN" })
 	public String courseModify(
 			@RequestParam(value = "id", required = true) int id, 
-			@RequestParam(value = "name", required = true) String name, 
+			//@RequestParam(value = "name", required = true) String name, 
 			@RequestParam(value = "year", required = true) String year,
 			@RequestParam(value = "semester", required = true) String semester,
 			@RequestParam(value = "state", required = true) String state,
 			//@RequestParam(value = "id_num", required = true) String id_num,
-			@RequestParam(value = "section_num", required = true) int section_num,
+			//@RequestParam(value = "section_num", required = true) int section_num,
 			@RequestParam(value = "instructor_id", required = true) int instructor_id,
 			Principal principal, ModelMap model) {
 		
-		coursecomponent.updateCourse(id, name, year,
-				semester,state,section_num, instructor_id);
+		coursecomponent.updateCourse(id, year,
+				semester,state, instructor_id);
 		
 		
 		return "redirect:/view_course";
@@ -142,20 +197,9 @@ public class ManagerController {
 			@RequestParam(value = "to_enroll", required = true) List<Long> student_ids, 
 			Principal principal, ModelMap model) {
 			
-		/*Course course = coursecomponent.findCourseByID(id);
-		//List<User> studenttoenroll = coursecomponent.getUserListByID(student_ids);
-		for(Integer sid : student_ids){
-			course.getStudents().add(coursecomponent.getUserByID(sid));
-		}
-		System.out.println(course.getStudents().size());*/
+
 		coursecomponent.enrollStudentToCourse(id, student_ids);
-		
-		//System.out.println(studenttoenroll.get(0).getId());
-		
-		/*List<User> unenrolled = coursecomponent.getAllUnenrolled(id);
-		System.out.println(unenrolled.size());
-		model.addAttribute("course", course);
-		model.addAttribute("not_enrolled",unenrolled);*/
+
 		return "redirect:/enrollstudent_course?id=" + id;
 	}
 	
