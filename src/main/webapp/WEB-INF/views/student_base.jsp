@@ -53,6 +53,7 @@
                         </li>
                         <li class="divider"></li> -->
                         <li><a  href="<c:url value="/logout"/>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -84,9 +85,7 @@
                     <li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>
 							Courses<span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level">
-							<c:forEach items="${courses}" var="course">
-								<li><c:out value="${course.name}" /></li>
-							</c:forEach>
+							<a href="<c:url value="/studentcourse"/>">Course List</a>
 						</ul> <!-- /.nav-second-level --></li>
 <!--                     <li> -->
 <!--                         <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a> -->
