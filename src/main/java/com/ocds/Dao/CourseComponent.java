@@ -308,6 +308,21 @@ public class CourseComponent {
 		
 		return courses;
 	}
+	
+	public List<Course> getCourseListForStudent(String username){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin(); 
+		
+		List<Course> courses =  entitymanager.createQuery(
+				"SELECT course FROM Course course JOIN course.students cs "
+				+ "where cs.username = ?1", Course.class)
+				.setParameter(1, username)
+				.getResultList();
+		
+		entitymanager.getTransaction().commit();  
+		entitymanager.close(); 
+		return courses;
+	}
 	/*public void test(){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();  
