@@ -109,18 +109,16 @@ public class CourseComponent {
 		return list; 
 	}	
 	
-	public void updateCourse(int course_id,String name,String year,
-			String semester,String state,int section_num,int instructor_id){
+	public void updateCourse(int course_id,String year,
+			String semester,String state,int instructor_id){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();  
 		
 		Course course = entitymanager.createQuery("SELECT course FROM Course course where course.id = ?1", Course.class).setParameter(1, course_id)
 				.getResultList().get(0);
-		course.setName(name);
 		course.setYear(year);
 		course.setSemester(semester);
 		course.setState(state);
-		course.setSection_num(section_num);
 		
 		User instructor = entitymanager.createQuery("SELECT user FROM User user where id = ?1", User.class)
 				.setParameter(1, Long.valueOf(instructor_id)).getResultList().get(0);
@@ -137,7 +135,10 @@ public class CourseComponent {
 	public void deleteCourse(Course course){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();  
+		
+		course.setInstructor(null);
 		entitymanager.remove(entitymanager.merge(course));
+		
 		entitymanager.getTransaction().commit();  
 		entitymanager.close(); 
 	}
@@ -180,14 +181,19 @@ public class CourseComponent {
 				("SELECT user FROM User user JOIN user.authorities ua where ua.id = 3", User.class)
 				.getResultList();
 		Set<User> enrolled = findCourseByID(course_id).getStudents();
-		
+
 		for(int i=0; i<all.size(); i++){
-			for(User u : enrolled){
-				if(u.getId() == all.get(i).getId()){
-					all.remove(i);
-					i--;
-					break;
-				}	
+			if(findCourseByID(course_id).getInstructor().getId() == all.get(i).getId()){
+				all.remove(i);
+				i--;
+			}else{
+				for(User u : enrolled){
+					if(u.getId() == all.get(i).getId()){
+						all.remove(i);
+						i--;
+						break;
+					}	
+				}
 			}
 		}
 		
