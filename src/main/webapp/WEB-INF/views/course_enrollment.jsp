@@ -53,7 +53,7 @@
 					</tr>
 				</c:forEach>
 			</table>
-			<button type="submit" class="btn btn-primary">Enroll
+			<button type="submit" class="btn btn-primary">Remove
 						Students</button>
 		</div>
 		</form>
