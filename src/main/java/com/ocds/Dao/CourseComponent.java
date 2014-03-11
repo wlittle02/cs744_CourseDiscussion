@@ -137,6 +137,7 @@ public class CourseComponent {
 		entitymanager.getTransaction().begin();  
 		
 		course.setInstructor(null);
+		course.setStudents(null);
 		entitymanager.remove(entitymanager.merge(course));
 		
 		entitymanager.getTransaction().commit();  
