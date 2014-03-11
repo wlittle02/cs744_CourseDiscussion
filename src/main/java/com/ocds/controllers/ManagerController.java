@@ -56,11 +56,18 @@ public class ManagerController {
 		SEMESTERS[3] = "Winter";
 	}
 	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String defaultpage() {
+		return "redirect:/login";
+	}
+	
+	
+			
+	/*@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test() {
 		System.out.println(coursecomponent.getCourseListForStudent("chen.gong"));
 		return "course_enrollment";
-	}
+	}*/
 	
 	//Begin of Course
 	@RequestMapping(value = "/register_course", method = RequestMethod.GET)
