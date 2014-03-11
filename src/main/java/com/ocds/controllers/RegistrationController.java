@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.SaltSource;
@@ -66,15 +67,17 @@ public class RegistrationController {
 			.authorities(new HashSet<Role>())
 			.build();
 		List<Role> roles = getRoles();
-		for (int i = 0; i < getRoles().size(); i++)
+		ArrayList<Role> userrole= new ArrayList<Role>();
+ 		for (int i = 0; i < roles.size(); i++)
 		{
+			System.out.println(roles.get(i).getName());
 			if (userroles.contains(roles.get(i).getName()))
 			{
-				user.addRole(roles.get(i));
+				userrole.add(roles.get(i));
 			}
 		}
-		
-		userComponent.addUser(user);
+ 		
+		userComponent.addUser(user,userrole);
 		model.addAttribute("success", true);
 		
 		return "register";

@@ -32,7 +32,7 @@ public class StudentController {
 		System.out.println("Creating Student Controller");
 	}
 	
-	@RequestMapping(value = "/studentcourse")
+	@RequestMapping(value = "/student_courses")
 	public String getCourses(ModelMap model, HttpSession session) {
 		String loginuser = (String) session.getAttribute( "loginuser" );
 		//User student = userComponent.loadUserByUsername(loginuser);

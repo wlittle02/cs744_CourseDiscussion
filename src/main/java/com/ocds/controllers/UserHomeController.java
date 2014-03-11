@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.ocds.Dao.CourseComponent;
 import com.ocds.users.*;
 
 
@@ -37,6 +38,8 @@ import com.ocds.users.*;
 public class UserHomeController {
 	@Autowired
 	UserComponent userComponent;
+	@Autowired
+	CourseComponent courseComponent;
 	
 	
 			
@@ -87,7 +90,9 @@ public class UserHomeController {
 	
 	@RequestMapping(value = "/delete")
 	@Secured(value = { "ROLE_ADMIN" })
-	public String modifyUser(@RequestParam(value = "username", required = true) String username,  ModelMap model) {			
+	public String modifyUser(@RequestParam(value = "username", required = true) String username, HttpSession session, ModelMap model) {	
+		String loginuser = (String) session.getAttribute( "loginuser" );		
+		//courseComponent.removeAllCoursesOfStudent(username);
 		userComponent.deleteUser(username);
 		return "redirect:/viewusers";
 	}
@@ -109,33 +114,16 @@ public class UserHomeController {
         	model.addAttribute("updateerror", true);
         	return "redirect:/viewusers";
             
-        }
-        List<Role> roles = getRoles();
+        }        
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setEmail(email);   	
-        System.out.println(roles.get(0).getName());
-    	for(int i=0;i<roles.size();i++){
-	    	if (userroles.contains(roles.get(i).getName())
-	    			&& !(user.getAuthorities().contains(roles.get(i).getName()))
-	    			){
-	    	user.addRole(roles.get(i));
-	    	System.out.println(roles.get(i));
-	    	}
-    	}
-    	user.merge();
-    	//userComponent.addUser(user);
-	model.addAttribute("message", "Update success.");
+        user.setEmail(email);   	        
+        user.setAuthorities(null);   	
+    	userComponent.updateUser(user,userroles);
+	    model.addAttribute("message", "Update success.");
 	
 	return "redirect:/viewusers";
 
 }
-	  private List<Role> getRoles() {		
-  		List<Role> roles = new ArrayList<Role>();
-  		for(String roleName : Role.roleNames) {
-  			Role role = new Role(roleName);  			
-  			roles.add(role);    			
-  		}
-  		return roles;
-  	}
+	 
 }

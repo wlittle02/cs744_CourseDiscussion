@@ -83,7 +83,7 @@ public class LoginController {
 		session.setAttribute("loginuser" , username);
 		
 		if (role.equalsIgnoreCase("ROLE_ADMIN")) {	
-            return "base";
+            return "manager_home";
         }	
 	 if (role.equalsIgnoreCase("ROLE_INSTRUCTOR")) {	
             return "redirect:/instructor_courses";

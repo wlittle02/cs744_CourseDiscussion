@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ocds.users.User;
 import com.ocds.users.UserComponent;
@@ -31,17 +33,14 @@ public class InstructorController {
 	 	
 	 	model.addAttribute("loginuser",loginuser);
 	 	model.addAttribute("courses",courses);
-	 	return "instructor";
+	 	return "instructor_home";
 	}
 	
-	@RequestMapping(value = "/student_courses")
-	public String getCoursesForStudent(ModelMap model, HttpSession session) {
-		String loginuser = (String) session.getAttribute( "loginuser" );
-		User student = userComponent.loadUserByUsername(loginuser);
-		List<Course> courses = courseComponent.getAllCoursesforStudent(student);	 		 	
-	 	model.addAttribute("loginuser",loginuser);
-	 	model.addAttribute("courses",courses);
-	 	return "student";
+	@RequestMapping(value = "/view_instructor_course", method = RequestMethod.GET)
+	public String viewThread(@RequestParam(value = "courseId", required = true) String courseId,HttpSession session, ModelMap model)
+	{
+		
+		return "instructor_course";
 	}
-
+	
 }
