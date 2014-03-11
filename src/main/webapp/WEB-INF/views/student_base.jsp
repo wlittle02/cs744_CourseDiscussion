@@ -85,7 +85,7 @@
                     <li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>
 							Courses<span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level">
-							<a href="<c:url value="/studentcourse"/>">Course List</a>
+							<a href="<c:url value="/student_course"/>">Course List</a>
 						</ul> <!-- /.nav-second-level --></li>
 <!--                     <li> -->
 <!--                         <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a> -->
