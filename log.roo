@@ -1,0 +1,33 @@
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-11-14 15:28:58
+project --topLevelPackage com.hunt.donuts --projectName donut-shop --java 7 --packaging WAR
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-11-14 15:29:05
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-11-14 15:29:08
+web mvc setup
+jpa setup --database MYSQL --provider ECLIPSELINK 
+entity jpa --class com.hunt.donuts.Donut 
+// [failed] entity jpa --class com.hunt.donuts.domain.users.User
+entity jpa --class com.hunt.donuts.domain.users.DonutShopUser
+// [failed] entity jpa --class com.hunt.donuts.domain.users.Role
+entity jpa --class com.hunt.donuts.domain.users.DonutShopRole
+entity jpa --class com.hunt.donuts.domain.users.DonutShopPrivilege
+web mvc controller --class com.hunt.donuts.controllers.UserHomeController
+web mvc controller --class com.hunt.donuts.controllers.LoginController
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-11-15 14:13:40
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-11-15 14:14:42
+perform clean 
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-02-08 20:42:40
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2014-02-08 21:04:47
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-02-09 08:59:37
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2014-02-09 09:14:15
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-02-09 11:26:28
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2014-02-09 12:03:53
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-02-09 12:06:46
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2014-02-09 12:24:15
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-02-16 12:36:06
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2014-02-16 12:37:20
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-02-16 12:46:16
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-03-09 14:03:09
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2014-03-10 09:25:07
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-03-10 15:18:41
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2014-03-10 21:16:51
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2014-03-10 22:08:09
