@@ -84,39 +84,14 @@
                     <li>
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Courses<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
+                        
                             <li>
                                 <a href="<c:url value="/instructor_courses"/>">Instructor Courses</a>
                             </li>
-                            <li >
-                                <a href="<c:url value="/viewusers"/>">User List</a>
-                            </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
-                    <li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>
-							Courses<span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level">
-							<li><a href="<c:url value="register_course"/>">New
-									Course Registration</a></li>
-							<li><a href="<c:url value="/view_course"/>">Course List</a>
-							</li>
-						</ul> <!-- /.nav-second-level --></li>
-<!--                     <li> -->
-<!--                         <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a> -->
-<!--                     </li> -->
-                    <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Reports<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="panels-wells.html">Single Course</a>
-                            </li>
-                            <li>
-                                <a href="buttons.html">All Courses</a>
-                            </li>
-                            
-                        </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                   
      <!--                <li>
                         <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">

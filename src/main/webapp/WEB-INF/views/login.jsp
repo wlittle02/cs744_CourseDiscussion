@@ -48,7 +48,7 @@
        </div>
     </div> 
 
-    <!--  <a href="<c:url value="/setup"/>">Setup Mock Data</a> -->
+     <a href="<c:url value="/setup"/>">Setup Mock Data</a> 
     <!-- /container -->
 
 
