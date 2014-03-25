@@ -103,7 +103,7 @@ public class StudentController {
 		return "redirect:/student_class";
 	}
 	
-	//@RequestMapping(value = "/createContribution")
+	@RequestMapping(value = "/createContribution")
 	public String createContribution(@RequestParam(value = "threadId", required = true) String threadId,
 									 @RequestParam(value = "message", required = true) String message,
 									 @RequestParam(value = "attachment", required = true) String attachment,
@@ -123,7 +123,7 @@ public class StudentController {
 		return "redirect:/student_contribution";
 	}
 	
-	@RequestMapping(value = "/createContribution", method = RequestMethod.GET)
+	//@RequestMapping(value = "/createContribution", method = RequestMethod.GET)
 	public String createContribution(@RequestParam(value = "threadId", required = true) String threadId, ModelMap modelmap, HttpSession session)
 	{
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");

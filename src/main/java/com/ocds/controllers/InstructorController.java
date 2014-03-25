@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ocds.users.User;
 import com.ocds.users.UserComponent;
 import com.ocds.Dao.CourseComponent;
+import com.ocds.Dao.ThreadComponent;
+import com.ocds.Domain.CThread;
 import com.ocds.Domain.Course;
 
 
@@ -23,7 +25,8 @@ public class InstructorController {
 	CourseComponent courseComponent;
 	@Autowired
 	UserComponent userComponent;
-	
+	@Autowired
+	ThreadComponent threadComponent;
 	
 	@RequestMapping(value = "/instructor_courses")
 	public String getCoursesForInstructor(ModelMap model, HttpSession session) {
@@ -40,6 +43,31 @@ public class InstructorController {
 	public String viewThread(@RequestParam(value = "courseId", required = true) String courseId,HttpSession session, ModelMap model)
 	{
 		
+		return "instructor_course";
+	}
+	
+	@RequestMapping(value = "/createThread", method = RequestMethod.POST)
+	public String createThread(@RequestParam(value = "courseId", required = true) String courseId,
+			                   HttpSession session,
+			                   ModelMap modelmap)
+	{
+		
+		return "instructor_createThread";
+	}
+	
+	@RequestMapping(value = "/newThread", method = RequestMethod.POST)
+	public String newThread(@RequestParam(value = "userName", required = true) String userName,
+							@RequestParam(value = "threadName", required = true) String threadName,
+					        @RequestParam(value = "courseId", required = true) String courseId,
+						    HttpSession session,
+							ModelMap modelmap)
+	{
+		CThread newThread = new CThread(threadName,
+									    this.courseComponent.findCourseByID(Integer.parseInt(courseId)),
+									    "",
+									    "",
+									    true);
+		this.threadComponent.createThread(newThread);
 		return "instructor_course";
 	}
 	

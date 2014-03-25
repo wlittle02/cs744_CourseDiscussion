@@ -13,8 +13,10 @@
 					<c:forEach items="${contributions}" var="contribution">
 						<tr>
 							<td><c:out value="${contribution.contribution.message}"/></td>
-							<td/>
-							<td><c:out value="${contribution.contribution.summaryId}"/></td>
+							<c:if test != "${contribution.contribution.attachment != ''}">
+								<a href="">Attachment Present</a>
+							</c:if>
+							<td><c:out value="${contribution.contribution.datetime}"/></td>
 							<td><c:out value="${contribution.userName}"/></td>
 						</tr>
 					</c:forEach>

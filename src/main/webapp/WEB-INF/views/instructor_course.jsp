@@ -18,7 +18,7 @@
 				</table>
                 </div>
                 <form name="formNewThread="form-horizontal" role="form"
-			action="<c:url value="/createthread"/>" method="post">
+			action="<c:url value="/createthread?courseId=${courseId}"/>" method="post">
                 <div class="form-group">
 				<div class="col-sm-3" align="right">
 					<button type="submit" class="btn btn-primary">Create New Thread</button>
