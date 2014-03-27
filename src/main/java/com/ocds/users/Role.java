@@ -14,7 +14,7 @@ public class Role implements GrantedAuthority {
 	    private static final long serialVersionUID = 1L;
 	    private String name;
 
-	    public static String[] roleNames = { "ROLE_ADMIN","ROLE_INSTRUCTOR","ROLE_STUDENT" };
+	    public static String[] roleNames = { "ROLE_ADMIN","ROLE_INSTRUCTOR","ROLE_STUDENT","ROLE_TA" };
 	    
 	    public Role(String n) {
 	    	this.name = n;

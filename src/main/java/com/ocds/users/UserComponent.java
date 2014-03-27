@@ -50,6 +50,11 @@ public class UserComponent implements UserDetailsService {
        		user.addRole(role);
        		
     		}   
+    		if (roles.get(i).getName().equalsIgnoreCase("ROLE_TA" )){
+           		Role role = Role.findRole(4L);    		
+           		user.addRole(role);
+           		
+        		}   
     		
     		
     	}
@@ -63,18 +68,19 @@ public class UserComponent implements UserDetailsService {
     	for(int i=0;i<userroles.size();i++){
 	    	if (userroles.contains("ROLE_ADMIN")){
 	    		Role role = Role.findRole(1L);    		
-        		user.addRole(role);
-        			    	
+        		user.addRole(role);        			    	
 	    	}
 	    	if (userroles.contains("ROLE_INSTRUCTOR")){
 	    		Role role = Role.findRole(2L);    		
-        		user.addRole(role);
-        		    	
+        		user.addRole(role);        		    	
 	    	}
 	    	if (userroles.contains("ROLE_STUDENT")){
 	    		Role role = Role.findRole(3L);    		
-        		user.addRole(role);
-        		    	
+        		user.addRole(role);        		    	
+	    	}
+	    	if (userroles.contains("ROLE_TA")){
+	    		Role role = Role.findRole(4L);    		
+        		user.addRole(role);        		    	
 	    	}
 	    	
     	}	
