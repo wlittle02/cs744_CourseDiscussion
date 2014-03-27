@@ -92,7 +92,8 @@ public class UserHomeController {
 	@Secured(value = { "ROLE_ADMIN" })
 	public String modifyUser(@RequestParam(value = "username", required = true) String username, HttpSession session, ModelMap model) {	
 		String loginuser = (String) session.getAttribute( "loginuser" );		
-		//courseComponent.removeAllCoursesOfStudent(username);
+		courseComponent.removeAllCoursesOfStudent(username);
+		courseComponent.removeAllCoursesOfInstructor(username);
 		userComponent.deleteUser(username);
 		return "redirect:/viewusers";
 	}
