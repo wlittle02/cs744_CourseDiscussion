@@ -88,7 +88,7 @@ public class RegistrationController {
 		List<Role> roles = new ArrayList<Role>();
 		for (String rolename : Role.roleNames)
 		{
-			Role role = new Role(rolename);
+			Role role = new Role(rolename);			
 			roles.add(role);
 		}
 		return roles;
