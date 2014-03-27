@@ -317,23 +317,50 @@ public class CourseComponent {
 	
 	public void removeAllCoursesOfStudent(String username){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
-		entitymanager.getTransaction().begin(); 		
-		//List<Course> courses = entitymanager.createQuery("SELECT course FROM Course course JOIN course.students where ?1 in course.students", Course.class).setParameter(1, student).getResultList();
+		entitymanager.getTransaction().begin();	
+		
 		List<Course> courses =  entitymanager.createQuery(
 				"SELECT course FROM Course course JOIN course.students cs "
 				+ "where cs.username = ?1", Course.class)
 				.setParameter(1, username)
 				.getResultList();
-		if (courses!=null){
-			
-			User student = User.findUserByName(username);
-			for(Course course : courses ){
-				course.getStudents().remove(student);
-			    entitymanager.refresh(course);
-			    entitymanager.merge(course);
-			}
-		}
 		
+		User student = User.findUserByName(username);
+		List<User> students = entitymanager.createQuery
+				("SELECT user FROM User user WHERE id = ?1", User.class)
+				.setParameter(1, student.getId()).getResultList();
+		if (courses!=null){			
+			for(Course course : courses ){
+				for(User u : students){
+					entitymanager.refresh(u);
+					course.getStudents().remove(u);
+				}				
+				entitymanager.merge(course);
+			}
+		}		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+	}
+	public void removeAllCoursesOfInstructor(String username){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();	
+		User instructor = User.findUserByName(username);
+		List<Course> courses =  entitymanager.createQuery(
+				"SELECT course FROM Course course where course.instructor = ?1", Course.class)
+				.setParameter(1, instructor).getResultList();
+		
+		
+		List<User> instructors = entitymanager.createQuery
+				("SELECT user FROM User user WHERE id = ?1", User.class)
+				.setParameter(1, instructor.getId()).getResultList();
+		if (courses!=null){			
+			for(Course course : courses ){
+				for(User u : instructors){
+					course.setInstructor(null);
+				}				
+				entitymanager.merge(course);
+			}
+		}		
 		entitymanager.getTransaction().commit();
 		entitymanager.close();
 	}
