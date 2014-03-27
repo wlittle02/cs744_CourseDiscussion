@@ -84,6 +84,11 @@
 							name="userroles" value="ROLE_STUDENT">Student
 						</label>
 					</div>
+					<div class="checkbox">
+						<label> <input id="checkta" type="checkbox"
+							name="userroles" value="ROLE_TA">Teaching Assistant
+						</label>
+					</div>
 				</div>
 			</div>
 			<c:if test="${regerror}">
@@ -104,21 +109,23 @@
 <script>
 function validate() {
     var d = document.formregister;
-    if((d.password.value != '') && (d.repassword.value == d.password.value)) {
-        var manager = document.getElementById('checkmanager');
-     if( document.getElementById('checkmanager').checked 
-     		|| document.getElementById('checkinstructor').checked || document.getElementById('checkstudent').checked ) {
-     			
-         return true;
-     }
-     alert("A Role must be selected");
-    }
-    else
-    {
+    if((d.password.value == '') || (d.repassword.value != d.password.value)) {
     	alert("Passwords not same");
+    	return false;
     }
+    var manager = document.getElementById('checkmanager');
+    if( !document.getElementById('checkmanager').checked 
+     		&& !document.getElementById('checkinstructor').checked
+     		&& !document.getElementById('checkstudent').checked
+     		&& !document.getElementById('checkta').checked) {
+    	alert("A Role must be selected");
+    	return false;
+    }
+    if(document.getElementById('checkta').checked && !document.getElementById('checkstudent').checked ){
+   		alert("If user has role of Teaching Assistant then must have role of Student");
+    	return false;
+     }	    	 
+    return true;    
     
-    
-    return false;
 }
 </script>

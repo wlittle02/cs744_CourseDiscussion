@@ -38,6 +38,7 @@
       		<option value="ROLE_ADMIN">Manager</option>
       		<option value="ROLE_INSTRUCTOR">Instructor</option>
       		<option value="ROLE_STUDENT">Student</option>
+      		<option value="ROLE_TA">Teaching Assistant</option>      		
         </select>
       <c:if test="${error}">
       <div class="alert alert-danger">${message}</div>

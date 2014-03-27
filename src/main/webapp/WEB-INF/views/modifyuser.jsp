@@ -56,6 +56,9 @@
 					<c:if test="${role.name == 'ROLE_STUDENT'}">
 						<c:set var="student" value="true" />
 					</c:if>
+					<c:if test="${role.name == 'ROLE_TA'}">
+						<c:set var="ta" value="true" />
+					</c:if>
 				</c:forEach>
 
 				<div class="col-sm-offset-2 col-sm-10">
@@ -78,6 +81,12 @@
 						<label> <input id='checkstudent' type="checkbox"
 							name="userroles" value="ROLE_STUDENT"
 							<c:if test="${student == 'true'}">checked="checked"</c:if>>Student
+						</label>
+					</div>
+					<div class="checkbox">
+						<label> <input id='checkta' type="checkbox"
+							name="userroles" value="ROLE_TA"
+							<c:if test="${ta == 'true'}">checked="checked"</c:if>>Teaching Assistant
 						</label>
 					</div>
 				</div>
@@ -105,13 +114,18 @@
 <script type="text/javascript">
  	function validate() {
         
-        var manager = document.getElementById('checkmanager');
-        if( document.getElementById('checkmanager').checked 
-        		|| document.getElementById('checkinstructor').checked || document.getElementById('checkstudent').checked ) {
-        			
-            return true;
-        }
-        alert("A Role must be selected");
-        return false;
+ 		 var manager = document.getElementById('checkmanager');
+ 	    if( !document.getElementById('checkmanager').checked 
+ 	     		&& !document.getElementById('checkinstructor').checked
+ 	     		&& !document.getElementById('checkstudent').checked
+ 	     		&& !document.getElementById('checkta').checked) {
+ 	    	alert("A Role must be selected");
+ 	    	return false;
+ 	    }
+ 	    if(document.getElementById('checkta').checked && !document.getElementById('checkstudent').checked ){
+ 	   		alert("If user has role of Teaching Assistant then must have role of Student");
+ 	    	return false;
+ 	     }	    	 
+ 	    return true;  
     }
 </script>
