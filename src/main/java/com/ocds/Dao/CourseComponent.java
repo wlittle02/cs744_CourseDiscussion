@@ -182,6 +182,7 @@ public class CourseComponent {
 				("SELECT user FROM User user JOIN user.authorities ua where ua.id = 3", User.class)
 				.getResultList();
 		Set<User> enrolled = findCourseByID(course_id).getStudents();
+		Set<User> TAs = findCourseByID(course_id).getTAs();
 
 		for(int i=0; i<all.size(); i++){
 			if(findCourseByID(course_id).getInstructor().getId() == all.get(i).getId()){
@@ -195,6 +196,17 @@ public class CourseComponent {
 						break;
 					}	
 				}
+			}
+		}
+		
+		//Remove student who is ta for this course
+		for(int i=0; i<all.size(); i++){
+			for(User u : TAs){
+				if(u.getId() == all.get(i).getId()){
+					all.remove(i);
+					i--;
+					break;
+				}	
 			}
 		}
 		
@@ -364,12 +376,96 @@ public class CourseComponent {
 		entitymanager.getTransaction().commit();
 		entitymanager.close();
 	}
-	/*public void test(){
+	
+//For TAs	
+	public List<User> getAllUnsignedTAs(int course_id){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
-		entitymanager.getTransaction().begin();  
-		entitymanager.persist(new Course());  
+		entitymanager.getTransaction().begin(); 
+		
+		List<User> all = entitymanager.createQuery
+				("SELECT user FROM User user JOIN user.authorities ua where ua.id = 4", User.class)
+				.getResultList();
+		Set<User> enrolled = findCourseByID(course_id).getTAs();
+		Set<User> students = findCourseByID(course_id).getStudents();
+
+		for(int i=0; i<all.size(); i++){
+			if(findCourseByID(course_id).getInstructor().getId() == all.get(i).getId()){
+				all.remove(i);
+				i--;
+			}else{
+				for(User u : enrolled){
+					if(u.getId() == all.get(i).getId()){
+						all.remove(i);
+						i--;
+						break;
+					}	
+				}
+			}	
+		}
+		//Remove tas who have already enrolled to the course
+		for(int i=0; i<all.size(); i++){
+			for(User u : students){
+				if(u.getId() == all.get(i).getId()){
+					all.remove(i);
+					i--;
+					break;
+				}	
+			}
+		}
+		
 		entitymanager.getTransaction().commit();  
-		entitymanager.close();  
+		entitymanager.close(); 
+		return all;
 	}
-*/
+	
+	public void signTAToCourse(int course_id, List<Long> ta_ids){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		List<User> tas = entitymanager.createQuery
+				("SELECT user FROM User user WHERE id IN ?1", User.class)
+				.setParameter(1, ta_ids).getResultList();
+		
+		Course course = entitymanager.createQuery
+				("SELECT course FROM Course course where course.id = ?1", Course.class)
+				.setParameter(1, course_id).getResultList().get(0);
+		
+		for(User u : tas){
+			entitymanager.refresh(u);
+			course.getTAs().add(u);
+		}
+		
+		entitymanager.merge(course);
+		
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		
+	}
+	
+	public void resignTaFromCourse(int course_id, List<Long> ta_ids){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		List<User> tas = entitymanager.createQuery
+				("SELECT user FROM User user WHERE id IN ?1", User.class)
+				.setParameter(1, ta_ids).getResultList();
+		
+		Course course = entitymanager.createQuery
+				("SELECT course FROM Course course where course.id = ?1", Course.class)
+				.setParameter(1, course_id).getResultList().get(0);
+		
+		for(User u : tas){
+			entitymanager.refresh(u);
+			course.getTAs().remove(u);
+		}
+		
+		entitymanager.merge(course);
+		
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		
+	}
+	
 }

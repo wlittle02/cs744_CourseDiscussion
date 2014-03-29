@@ -2,6 +2,7 @@ package com.ocds.controllers;
 
 import java.security.Principal;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ocds.Dao.CourseComponent;
 import com.ocds.Domain.Course;
+import com.ocds.users.Role;
 import com.ocds.users.User;
 
 @Controller
@@ -57,7 +61,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String defaultpage() {
+	public String defaultPage() {
 		return "redirect:/login";
 	}
 	
@@ -112,7 +116,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/view_course")
-	public String viewallusers(String date,ModelMap model, Principal principal) {
+	public String viewAllCourses(String date,ModelMap model, Principal principal) {
 			
 		List<Course> courses = coursecomponent.getAllCourses();
 	 	model.addAttribute("courses", courses);
@@ -182,7 +186,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/enrollstudent_course", method = RequestMethod.GET)
-	public String enrollStudent(
+	public String enrollStudents(
 			@RequestParam(value = "id", required = true) int id, 
 			HttpSession session, ModelMap model) {
 			
@@ -194,7 +198,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/enrollstudent_course", method = RequestMethod.POST)
-	public String enrollStuden(
+	public String enrollStudents(
 			@RequestParam(value = "id", required = true) int id, 
 			@RequestParam(value = "to_enroll", required = true) List<Long> student_ids, 
 			HttpSession session, ModelMap model) {
@@ -215,6 +219,56 @@ public class ManagerController {
 		
 		return "redirect:/enrollstudent_course?id=" + id;
 	}
+
+	@RequestMapping(value = "/signta_course", method = RequestMethod.GET)
+	public String signTAs(
+			@RequestParam(value = "id", required = true) int id, 
+			HttpSession session, ModelMap model) {
+			
+		Course course = coursecomponent.findCourseByID(id);
+		
+		List<User> not_signed = coursecomponent.getAllUnsignedTAs(id);
+		
+		model.addAttribute("course", course);
+		model.addAttribute("not_signed",not_signed);
+		return "course_signtas";
+	}
 	
+	@RequestMapping(value = "/signtas_course", method = RequestMethod.POST)
+	public String signTAs(
+			@RequestParam(value = "id", required = true) int id, 
+			@RequestParam(value = "to_sign", required = true) List<Long> ta_ids, 
+			HttpSession session, ModelMap model) {
+			
+
+		coursecomponent.signTAToCourse(id, ta_ids);
+
+		return "redirect:/signta_course?id=" + id;
+	}
+	
+	@RequestMapping(value = "/resigntas_course", method = RequestMethod.POST)
+	public String resignTAs(
+			@RequestParam(value = "id", required = true) int id, 
+			@RequestParam(value = "to_resign", required = true) List<Long> ta_ids, 
+			HttpSession session, ModelMap model) {
+			
+
+		coursecomponent.resignTaFromCourse(id, ta_ids);
+
+		return "redirect:/signta_course?id=" + id;
+	}
+	/*
+	@RequestMapping(value = "/removestudent_course", method = RequestMethod.POST)
+	public String removeStudent(
+			@RequestParam(value = "id", required = true) int id, 
+			@RequestParam(value = "to_remove", required = true) List<Long> student_ids, 
+			HttpSession session, ModelMap model) {
+			
+		coursecomponent.removeStudentFromCourse(id, student_ids);
+		
+		return "redirect:/enrollstudent_course?id=" + id;
+	}
+	
+	*/
 	//End of Course
 }
