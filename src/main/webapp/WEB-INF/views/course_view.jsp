@@ -17,6 +17,7 @@
 					<th>State</th>
 					<th>Instructor</th>
 					<th>Student</th>
+					<th>TAs</th>
 					<th>Modify</th>
 					<th>Delete</th>
 				</tr>
@@ -33,6 +34,7 @@
 						<c:out value="${course.instructor.firstName}  ${course.instructor.lastName}" />
 						</td>
 						<td><a href="enrollstudent_course?id=${course.id}">Students </a></td>
+						<td><a href="signta_course?id=${course.id}">TAs </a></td>
 						
 						<td><a href="modify_courses?id=${course.id}"> <img
 								border="0" src="<c:url value="/resources/images/pencil_2.png"/>"

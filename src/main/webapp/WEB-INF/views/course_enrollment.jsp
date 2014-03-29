@@ -30,66 +30,78 @@
 			</table>
 		</div>
 
-		<!-- Strat of Enrolled Student -->
-		<form name="removestudent" class="form-horizontal" role="form"
-			action="<c:url value="removestudent_course"/>" method="post">
-		<div class="col-lg-12">
-			<h1 class="page-header">Enrolled Students</h1>
-			<table class="table table-striped table-bordered">
-				<tr>
-					<th></th>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Email</th>
-				</tr>
-				<input type="hidden" name="id" value="${course.id}">
-				<c:forEach items="${course.students}" var="student">
-					<tr>
-						<td><input type="checkbox"
-							name="to_remove" value="${student.id}"></td>
-						<td><c:out value="${student.firstName}" /></td>
-						<td><c:out value="${student.lastName}" /></td>
-						<td><c:out value="${student.email}" /></td>
-					</tr>
-				</c:forEach>
-			</table>
-			<button type="submit" class="btn btn-primary">Remove
-						Students</button>
-		</div>
-		</form>
-		<!-- End of Student Enrolled  -->
+		<table class="list-table">
+			<th><h1 class="page-header">Enrolled Students</h1></th>
+			<th></th>
+			<th><h1 class="page-header">Unenrolled Students</h1></th>
+			<tr>
+				<td style="vertical-align: top">
+					<!-- Strat of Enrolled Student -->
+					<form id="form1" name="removestudent" class="form-horizontal"
+						role="form" action="<c:url value="removestudent_course"/>"
+						method="post">
+						<div class="col-lg-12">
 
+							<table class="table table-striped table-bordered">
+								<tr>
+									<th></th>
+									<th>First Name</th>
+									<th>Last Name</th>
+									<th>Email</th>
+								</tr>
+								<input type="hidden" name="id" value="${course.id}">
+								<c:forEach items="${course.students}" var="student">
+									<tr>
+										<td><input type="checkbox" name="to_remove"
+											value="${student.id}"></td>
+										<td><c:out value="${student.firstName}" /></td>
+										<td><c:out value="${student.lastName}" /></td>
+										<td><c:out value="${student.email}" /></td>
+									</tr>
+								</c:forEach>
+							</table>
+						</div>
+					</form> <!-- End of Student Enrolled  -->
+				</td>
+				<td>
+					<button type="submit" class="btn btn-primary"
+						onclick="document.getElementById('form1').submit();">----->></button>
+					<br> <br>
+					<button type="submit" class="btn btn-primary"
+						onclick="document.getElementById('form2').submit();"><<-----</button>
+				</td>
+				<td style="vertical-align: top">
+					<!-- Start of Student not Enrolled -->
+					<form id="form2" name="enrollstudent" class="form-horizontal"
+						role="form" action="<c:url value="enrollstudent_course"/>"
+						method="post">
+						<div class="col-lg-12">
 
-		<!-- Start of Student not Enrolled -->
+							<table class="table table-striped table-bordered">
+								<tr>
+									<th></th>
+									<th>First Name</th>
+									<th>Last Name</th>
+									<th>Email</th>
+								</tr>
+								<input type="hidden" name="id" value="${course.id}">
+								<c:forEach items="${not_enrolled}" var="student">
+									<tr>
+										<td><input type="checkbox" name="to_enroll"
+											value="${student.id}"></td>
+										<td><c:out value="${student.firstName}" /></td>
+										<td><c:out value="${student.lastName}" /></td>
+										<td><c:out value="${student.email}" /></td>
+									</tr>
+								</c:forEach>
+							</table>
+						</div>
 
-		<form name="enrollstudent" class="form-horizontal" role="form"
-			action="<c:url value="enrollstudent_course"/>" method="post">
-			<div class="col-lg-12">
-				<h1 class="page-header">Unenrolled Students</h1>
-				<table class="table table-striped table-bordered">
-					<tr>
-						<th></th>
-						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Email</th>
-					</tr>
-					<input type="hidden" name="id" value="${course.id}">
-					<c:forEach items="${not_enrolled}" var="student">
-						<tr>
-							<td><input type="checkbox" name="to_enroll"
-								value="${student.id}"></td>
-							<td><c:out value="${student.firstName}" /></td>
-							<td><c:out value="${student.lastName}" /></td>
-							<td><c:out value="${student.email}" /></td>
-						</tr>
-					</c:forEach>
-				</table>
-				<button type="submit" class="btn btn-primary">Enroll
-						Students</button>
-			</div>
-			
-		</form>
-		<!-- End of Student not Enrolled -->
+					</form> <!-- End of Student not Enrolled -->
+				</td>
+			</tr>
+		</table>
+
 	</div>
 	<!-- /.row -->
 </div>
