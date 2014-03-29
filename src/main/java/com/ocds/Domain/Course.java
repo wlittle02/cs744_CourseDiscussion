@@ -43,6 +43,7 @@ public class Course implements java.io.Serializable {
 	//Lately Introduced
 	private String id_num;
 	private Integer section_num;
+	private Set<User> TAs = new HashSet<User>();
 	
 	public Course() {
 	}
@@ -147,4 +148,14 @@ public class Course implements java.io.Serializable {
 		this.section_num = section_num;
 	}
 
+	
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinTable(name="course_has_tas", joinColumns= {@JoinColumn(name="course_id")}, inverseJoinColumns={@JoinColumn(name="student_id")})
+	public Set<User> getTAs() {
+		return TAs;
+	}
+
+	public void setTAs(Set<User> tAs) {
+		TAs = tAs;
+	}
 }
