@@ -37,10 +37,11 @@ public class Contribution implements java.io.Serializable {
 	private String message;
 	private String attachment;
 	private Boolean isImportant;
-	private String enteredBy;
+	private String enteredBy;  //full name of user
+	private String username;
 	private CThread thread;
 	private Long summaryId;
-	private String datetime;
+	private String dateTime;
 	
 	public Contribution()
 	{
@@ -51,7 +52,8 @@ public class Contribution implements java.io.Serializable {
 						String pAttachment,
 						Boolean pIsImportant,
 						String pEnteredBy,
-						CThread pThread,
+						String username,
+						CThread pThread,						
 						Long pSummaryId,
 						String pDateTime)
 	{
@@ -59,6 +61,7 @@ public class Contribution implements java.io.Serializable {
 		setAttachment(pAttachment);
 		setIsImportant(pIsImportant);
 		setEnteredBy(pEnteredBy);
+		setUsername(username);
 		setThread(pThread);
 		setSummaryId(pSummaryId);
 		setDateTime(pDateTime);
@@ -126,13 +129,22 @@ public class Contribution implements java.io.Serializable {
 		this.summaryId = summaryId;
 	}
 	
-	@Column(name="datetime")
+	@Column(name="dateTime")
 	public String getDateTime()
 	{
-		return this.datetime;
+		return this.dateTime;
 	}
-	public void setDateTime(String datetime)
+	public void setDateTime(String dateTime)
 	{
-		this.datetime = datetime;
+		this.dateTime = dateTime;
+	}
+
+	@Column(name="username")
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }
