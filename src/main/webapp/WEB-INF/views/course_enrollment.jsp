@@ -35,13 +35,12 @@
 			<th></th>
 			<th><h1 class="page-header">Unenrolled Students</h1></th>
 			<tr>
-				<td style="vertical-align: top">
+				<td style="height : 20px; vertical-align: top; overflow-y: auto;">
 					<!-- Strat of Enrolled Student -->
 					<form id="form1" name="removestudent" class="form-horizontal"
 						role="form" action="<c:url value="removestudent_course"/>"
 						method="post">
-						<div class="col-lg-12">
-
+						<div class="col-lg-12" style="max-height : 400px; overflow-y: auto">
 							<table class="table table-striped table-bordered">
 								<tr>
 									<th></th>
@@ -75,7 +74,7 @@
 					<form id="form2" name="enrollstudent" class="form-horizontal"
 						role="form" action="<c:url value="enrollstudent_course"/>"
 						method="post">
-						<div class="col-lg-12">
+						<div class="col-lg-12" style="max-height : 400px; overflow-y: auto">
 
 							<table class="table table-striped table-bordered">
 								<tr>

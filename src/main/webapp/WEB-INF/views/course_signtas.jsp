@@ -39,7 +39,7 @@
 					<!-- Strat of Signed TA -->
 					<form id="form1" name="resigntas" class="form-horizontal" role="form"
 						action="<c:url value="resigntas_course"/>" method="post">
-						<div class="col-lg-12">
+						<div class="col-lg-12" style="max-height : 400px; overflow-y: auto">
 							<table class="table table-striped table-bordered">
 								<tr>
 									<th></th>
@@ -71,7 +71,7 @@
 
 					<form id="form2" name="signtas" class="form-horizontal" role="form"
 						action="<c:url value="signtas_course"/>" method="post">
-						<div class="col-lg-12">
+						<div class="col-lg-12" style="max-height : 400px; overflow-y: auto">
 							<table class="table table-striped table-bordered">
 								<tr>
 									<th></th>

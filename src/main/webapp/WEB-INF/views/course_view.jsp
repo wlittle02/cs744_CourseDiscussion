@@ -5,8 +5,9 @@
 <!-- Right Block Start -->
 <div id="page-wrapper">
 	<div class="row">
-		<div class="col-lg-12">
-			<h1 class="page-header">Course List</h1>
+		<h1 class="page-header">Course List</h1>
+		<div class="col-lg-12" style="max-height : 600px; overflow-y: auto">
+			
 			<table class="table table-striped table-bordered" align="center">
 				<tr>
 					<th align="center">Course ID</th>
