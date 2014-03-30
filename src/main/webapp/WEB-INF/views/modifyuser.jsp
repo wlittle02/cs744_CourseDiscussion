@@ -64,9 +64,9 @@
 				<div class="col-sm-offset-2 col-sm-10">
 					<div class="checkbox">
 						<label> <input id='checkmanager' type="checkbox"
-							name="userroles" value="ROLE_ADMIN"
-							<c:if test="${manager == 'true'}">checked="checked"</c:if>
-							<c:if test="${user.username == loginuser}"> disabled="true"</c:if>>
+							name="userroles" value="ROLE_ADMIN"							
+							<c:if test="${user.username == loginuser}"> disabled="true"</c:if>
+							<c:if test="${manager == 'true'}">checked="checked"</c:if>>
 							Manager
 						</label>
 					</div>

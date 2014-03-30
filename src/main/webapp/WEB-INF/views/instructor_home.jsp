@@ -8,7 +8,7 @@
                     <h1 class="page-header">Welcome to the Online Course Discussion System</h1>
                 </div>
                 <div>		
-				<table class="table table-striped table-bordered" align="center">
+				<table class="table table-striped table-bordered" >
 					<tr>
 					<th>Course Number</th>
 					<th>Course Name Name</th>					
@@ -16,7 +16,7 @@
 				<c:forEach items="${courses}" var="course">
 					<tr>
 						<td><c:out value="${course.id_num}" /></td>
-						<td><a href="view_instructor_course?courseId=${course.id}"><c:out value="${course.name}"/></a></td>
+						<td><a href="view_instructor_threads?courseId=${course.id}"><c:out value="${course.name}"/></a></td>
 						
 					</tr>
 				</c:forEach>
@@ -24,3 +24,5 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+ </div>
+            
