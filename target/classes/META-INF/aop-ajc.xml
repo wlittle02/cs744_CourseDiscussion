@@ -3,8 +3,8 @@
 <aspect name="com.ocds.users.Role_Roo_JavaBean"/>
 <aspect name="com.ocds.users.User_Roo_Jpa_Entity"/>
 <aspect name="com.ocds.users.User_Roo_ToString"/>
-<aspect name="com.ocds.users.Role_Roo_ToString"/>
 <aspect name="com.ocds.users.User_Roo_Jpa_ActiveRecord"/>
+<aspect name="com.ocds.users.Role_Roo_ToString"/>
 <aspect name="com.ocds.users.Role_Roo_Jpa_Entity"/>
 <aspect name="com.ocds.users.User_Roo_Configurable"/>
 <aspect name="com.ocds.users.Role_Roo_Jpa_ActiveRecord"/>
