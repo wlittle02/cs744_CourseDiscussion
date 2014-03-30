@@ -200,22 +200,26 @@ public class ManagerController {
 	@RequestMapping(value = "/enrollstudent_course", method = RequestMethod.POST)
 	public String enrollStudents(
 			@RequestParam(value = "id", required = true) int id, 
-			@RequestParam(value = "to_enroll", required = true) List<Long> student_ids, 
+			@RequestParam(value = "to_enroll", required = false) List<Long> student_ids, 
 			HttpSession session, ModelMap model) {
 			
-
-		coursecomponent.enrollStudentToCourse(id, student_ids);
-
+		if(student_ids != null){
+			coursecomponent.enrollStudentToCourse(id, student_ids);
+		}
+		
 		return "redirect:/enrollstudent_course?id=" + id;
 	}
 	
 	@RequestMapping(value = "/removestudent_course", method = RequestMethod.POST)
 	public String removeStudent(
 			@RequestParam(value = "id", required = true) int id, 
-			@RequestParam(value = "to_remove", required = true) List<Long> student_ids, 
+			@RequestParam(value = "to_remove", required = false) List<Long> student_ids, 
 			HttpSession session, ModelMap model) {
 			
-		coursecomponent.removeStudentFromCourse(id, student_ids);
+		if(student_ids != null){
+			coursecomponent.removeStudentFromCourse(id, student_ids);
+		}
+		
 		
 		return "redirect:/enrollstudent_course?id=" + id;
 	}
@@ -237,24 +241,27 @@ public class ManagerController {
 	@RequestMapping(value = "/signtas_course", method = RequestMethod.POST)
 	public String signTAs(
 			@RequestParam(value = "id", required = true) int id, 
-			@RequestParam(value = "to_sign", required = true) List<Long> ta_ids, 
+			@RequestParam(value = "to_sign",required = false) List<Long> ta_ids, 
 			HttpSession session, ModelMap model) {
 			
-
-		coursecomponent.signTAToCourse(id, ta_ids);
-
+		if(ta_ids != null){
+			coursecomponent.signTAToCourse(id, ta_ids);
+		}
+		
 		return "redirect:/signta_course?id=" + id;
 	}
 	
 	@RequestMapping(value = "/resigntas_course", method = RequestMethod.POST)
 	public String resignTAs(
 			@RequestParam(value = "id", required = true) int id, 
-			@RequestParam(value = "to_resign", required = true) List<Long> ta_ids, 
+			@RequestParam(value = "to_resign", required = false) List<Long> ta_ids, 
 			HttpSession session, ModelMap model) {
 			
-
-		coursecomponent.resignTaFromCourse(id, ta_ids);
-
+		
+		if(ta_ids != null){
+			coursecomponent.resignTaFromCourse(id, ta_ids);
+		}
+		
 		return "redirect:/signta_course?id=" + id;
 	}
 	/*
