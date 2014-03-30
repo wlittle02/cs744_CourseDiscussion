@@ -88,6 +88,9 @@ public class LoginController {
 	 if (role.equalsIgnoreCase("ROLE_INSTRUCTOR")) {	
             return "redirect:/instructor_courses";
         }
+	 if (role.equalsIgnoreCase("ROLE_TA")) {	
+         return "redirect:/ta_courses";
+     }
 	return "redirect:/student_courses";
 		
 	}

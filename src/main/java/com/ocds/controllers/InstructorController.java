@@ -1,5 +1,8 @@
 package com.ocds.controllers;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -16,6 +19,7 @@ import com.ocds.users.UserComponent;
 import com.ocds.Dao.CourseComponent;
 import com.ocds.Dao.ThreadComponent;
 import com.ocds.Domain.CThread;
+import com.ocds.Domain.Contribution;
 import com.ocds.Domain.Course;
 
 
@@ -39,36 +43,106 @@ public class InstructorController {
 	 	return "instructor_home";
 	}
 	
-	@RequestMapping(value = "/view_instructor_course", method = RequestMethod.GET)
+	@RequestMapping(value = "/view_instructor_threads", method = RequestMethod.GET)
 	public String viewThread(@RequestParam(value = "courseId", required = true) String courseId,HttpSession session, ModelMap model)
 	{
-		
-		return "instructor_course";
+		List<CThread> threads = threadComponent.getAllThreads(Integer.parseInt(courseId));
+		if (threads!=null)
+		model.addAttribute("threads",threads);
+		model.addAttribute("courseId",courseId);
+		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
+		model.addAttribute("courseName",course.getName());
+		return "instructor_threads";
 	}
 	
-	@RequestMapping(value = "/createThread", method = RequestMethod.POST)
+	@RequestMapping(value = "/createthread", method = RequestMethod.POST)
 	public String createThread(@RequestParam(value = "courseId", required = true) String courseId,
+							   @RequestParam(value = "threadName", required = true) String threadName,
 			                   HttpSession session,
-			                   ModelMap modelmap)
+			                   ModelMap model)
 	{
-		
-		return "instructor_createThread";
-	}
-	
-	@RequestMapping(value = "/newThread", method = RequestMethod.POST)
-	public String newThread(@RequestParam(value = "userName", required = true) String userName,
-							@RequestParam(value = "threadName", required = true) String threadName,
-					        @RequestParam(value = "courseId", required = true) String courseId,
-						    HttpSession session,
-							ModelMap modelmap)
-	{
+		Date date = new Date();			
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");	
+		String stringDate = dateFormat.format(date);				
+		if (threadComponent.findThreadByName(threadName)!=null){
+			model.addAttribute("error", true);
+			List<CThread> threads = threadComponent.getAllThreads(Integer.parseInt(courseId));
+			model.addAttribute("threads",threads);
+			Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
+			model.addAttribute("courseName",course.getName());
+			return "instructor_threads";
+		}
 		CThread newThread = new CThread(threadName,
 									    this.courseComponent.findCourseByID(Integer.parseInt(courseId)),
-									    "",
+									    stringDate,
 									    "",
 									    true);
 		this.threadComponent.createThread(newThread);
-		return "instructor_course";
+		List<CThread> threads = threadComponent.getAllThreads(Integer.parseInt(courseId));
+		model.addAttribute("threads",threads);
+		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
+		model.addAttribute("courseName",course.getName());
+		return "instructor_threads";
 	}
 	
+	@RequestMapping(value = "/view_contributions", method = RequestMethod.GET)
+	public String view_contributions(@RequestParam(value = "threadId", required = true) String threadId,HttpSession session, ModelMap model)
+	{
+		List<Contribution> contributions = threadComponent.getAllContributions(Long.parseLong(threadId));
+		if (contributions!=null)
+		model.addAttribute("contributions",contributions);
+		model.addAttribute("threadId",threadId);
+		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
+		model.addAttribute("threadName",thread.getName());
+		return "instructor_contributions";
+	}
+	@RequestMapping(value = "/createContribution", method = RequestMethod.POST)
+	public String createContribution(@RequestParam(value = "threadId", required = true) String threadId,
+							   @RequestParam(value = "message", required = true) String message,
+			                   HttpSession session,
+			                   ModelMap model)
+	{
+		Date date = new Date();			
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");	
+		String stringDate = dateFormat.format(date);
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		User user = userComponent.loadUserByUsername(loginuser);
+		String enteredBy = user.getFirstName() + " " + user.getLastName();
+		Contribution contribution = new Contribution(message,
+									    "",
+									    false,
+									    enteredBy,
+									    loginuser,
+									    threadComponent.getThread(Long.parseLong(threadId)),
+									    null,									    
+									    stringDate);
+		
+		this.threadComponent.createContribution(contribution);
+		List<Contribution> contributions = threadComponent.getAllContributions(Long.parseLong(threadId));
+		if (contributions!=null)
+		model.addAttribute("contributions",contributions);
+		model.addAttribute("threadId",threadId);
+		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
+		model.addAttribute("threadName",thread.getName());
+		return "instructor_contributions";
+	}
+	@RequestMapping(value = "/setContribution", method = RequestMethod.GET)
+	public String setContribution(@RequestParam(value = "isImportant", required = true) Boolean isImportant,
+							   @RequestParam(value = "contributionId", required = true) Long contributionId,
+			                   HttpSession session,
+			                   ModelMap model)
+	{
+		
+		Contribution contribution = threadComponent.getContribution(contributionId);
+		
+		threadComponent.contributionIsImportant(contribution, isImportant);
+		List<Contribution> contributions = threadComponent.getAllContributions(contribution.getThread().getId());
+		if (contributions!=null)
+		model.addAttribute("contributions",contributions);
+		String threadId = contribution.getThread().getId().toString();
+		model.addAttribute("threadId",threadId);
+		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
+		model.addAttribute("threadName",thread.getName());
+		return "instructor_contributions";
+	}
 }

@@ -105,8 +105,11 @@ public class UserHomeController {
 			@RequestParam(value = "username", required = false) String userName,
 			@RequestParam(value = "email", required = true) String email, 
 			@RequestParam(value = "userroles", required = true) ArrayList<String> userroles, 
-			ModelMap model) {			
+			ModelMap model,HttpSession session) {			
 		System.out.println("updating user");
+		String loginuser = (String) session.getAttribute( "loginuser" );	
+		if (userName.equalsIgnoreCase(loginuser))
+				userroles.add("ROLE_ADMIN");
 		for(int i=0;i<userroles.size();i++)
 			System.out.println(userroles.get(i));
 		User user =  User.findUserByName(userName);
