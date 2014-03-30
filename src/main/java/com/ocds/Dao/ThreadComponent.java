@@ -23,34 +23,6 @@ public class ThreadComponent {
 	@Autowired
 	EntityManagerFactory entitymanagerfactory;
 	
-	private ThreadContribution contribution;
-	
-	
-	public class ThreadContribution
-	{
-		public ThreadContribution(Contribution contribution) {
-			setContribution(contribution);
-		}
-
-		private String userName;
-		private Contribution contribution;
-
-		public String getUserName() {
-			return userName;
-		}
-
-		public void setUserName(String userName) {
-			this.userName = userName;
-		}
-
-		public Contribution getContribution() {
-			return contribution;
-		}
-
-		public void setContribution(Contribution contribution) {
-			this.contribution = contribution;
-		}
-	}
 	
 	public void createThread(CThread pThread)
 		
@@ -99,7 +71,26 @@ public class ThreadComponent {
 		
 		entitymanager.getTransaction().commit();
 		entitymanager.close();
-		return Threads.get(0);
+		if (Threads.size()>0)
+			return Threads.get(0);
+		else
+			return null;
+	}
+	
+	public CThread findThreadByName(String threadName)
+	{
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager();
+		entitymanager.getTransaction().begin();
+		
+		List<CThread> Threads = entitymanager.createQuery("SELECT thread FROM CThread thread WHERE thread.name = ?1", CThread.class)
+				.setParameter(1, threadName).getResultList();
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		if (Threads.size()>0)
+			return Threads.get(0);
+		else
+			return null;
 	}
 	
 	public void createContribution(Contribution pContribution)
@@ -125,22 +116,32 @@ public class ThreadComponent {
 		entitymanager.close();
 	}
 	
-	public List<ThreadContribution> getAllContributions(Long pThreadId)
+	public List<Contribution> getAllContributions(Long pThreadId)
 	{
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager();
 		entitymanager.getTransaction().begin();
 		
-		List<Contribution> getAllContributions = entitymanager.createQuery("SELECT contribution FROM Contribution contribution WHERE contribution.thread.id = ?1", Contribution.class).setParameter(1, pThreadId).getResultList();
-		List<ThreadContribution> allContributions = new ArrayList<ThreadContribution>();
+		List<Contribution> allContributions = entitymanager.createQuery("SELECT contribution FROM Contribution contribution WHERE contribution.thread.id = ?1", Contribution.class).setParameter(1, pThreadId).getResultList();
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();		
+		
+		return allContributions;
+	}
+	
+	public Contribution getContribution(Long contributionId)
+	{
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager();
+		entitymanager.getTransaction().begin();
+		
+		List<Contribution> contributions = entitymanager.createQuery("SELECT contribution FROM Contribution contribution WHERE contribution.id = ?1", Contribution.class)
+				.setParameter(1, contributionId).getResultList();
 		
 		entitymanager.getTransaction().commit();
 		entitymanager.close();
-		
-		for (int i = 0; i < getAllContributions.size(); i++)
-		{
-			allContributions.add(new ThreadContribution(getAllContributions.get(i)));
-		}
-		
-		return allContributions;
+		if (contributions.size()>0)
+			return contributions.get(0);
+		else
+			return null;
 	}
 }
