@@ -13,11 +13,11 @@
 				<c:forEach items="${contributions}" var="contribution">
 					<tr><td>
 						<c:if test="${contribution.isImportant == 'true'}">
-						<a href="setContribution?isImportant=false&contributionId=${contribution.id}">
+						<a href="set_instructor_Contribution?isImportant=false&contributionId=${contribution.id}">
 	  							<img border="0" src="<c:url value="/resources/images/yellowstar.jpg"/>" width="20" height="20"></a> 
 	  					</c:if> 
 	  					<c:if test="${contribution.isImportant != 'true'}">
-	  						<a href="setContribution?isImportant=true&contributionId=${contribution.id}">
+	  						<a href="set_instructor_Contribution?isImportant=true&contributionId=${contribution.id}">
 	  							<img border="0" src="<c:url value="/resources/images/white_star.jpg"/>" width="20" height="20"></a> 
 	  					</c:if>	
 	  					<br/>
@@ -31,7 +31,7 @@
 				</table>
                 </div>
                 <form name="formNewThread=" class="form-horizontal"
-			action="<c:url value="/createContribution?threadId=${threadId}"/>" method="post">
+			action="<c:url value="/create_instructor_Contribution?threadId=${threadId}"/>" method="post">
                 <div class="form-group">                
 				<div class="col-lg-10">					
 						<textarea class="form-control" name="message" id="message" cols="40" rows="6" required ></textarea>

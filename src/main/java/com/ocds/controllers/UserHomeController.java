@@ -94,6 +94,7 @@ public class UserHomeController {
 		String loginuser = (String) session.getAttribute( "loginuser" );		
 		courseComponent.removeAllCoursesOfStudent(username);
 		courseComponent.removeAllCoursesOfInstructor(username);
+		courseComponent.removeAllCoursesOfTa(username);
 		userComponent.deleteUser(username);
 		return "redirect:/viewusers";
 	}

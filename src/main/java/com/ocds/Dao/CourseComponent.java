@@ -313,7 +313,7 @@ public class CourseComponent {
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();  
 		List<Course> courses =  entitymanager.createQuery(
-				"SELECT course FROM Course course JOIN course.students cs "
+				"SELECT course FROM Course course JOIN course.TAs cs "
 				+ "where cs.username = ?1", Course.class)
 				.setParameter(1, username)
 				.getResultList();
@@ -359,6 +359,32 @@ public class CourseComponent {
 				for(User u : students){
 					entitymanager.refresh(u);
 					course.getStudents().remove(u);
+				}				
+				entitymanager.merge(course);
+			}
+		}		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+	}
+	public void removeAllCoursesOfTa(String username){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();	
+		
+		List<Course> courses =  entitymanager.createQuery(
+				"SELECT course FROM Course course JOIN course.TAs cs "
+				+ "where cs.username = ?1", Course.class)
+				.setParameter(1, username)
+				.getResultList();
+		
+		User ta = User.findUserByName(username);
+		List<User> tas = entitymanager.createQuery
+				("SELECT user FROM User user WHERE id = ?1", User.class)
+				.setParameter(1, ta.getId()).getResultList();
+		if (courses!=null){			
+			for(Course course : courses ){
+				for(User u : tas){
+					entitymanager.refresh(u);
+					course.getTAs().remove(u);
 				}				
 				entitymanager.merge(course);
 			}

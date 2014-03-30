@@ -8,7 +8,7 @@
                     <h1 class="page-header"><c:out value="${courseName}" /></h1>
                 </div>
                 <div>		
-				<table class="table table-striped table-bordered" align="center">
+				<table class="table table-striped table-bordered" >
 					<tr>
 					<th>Date Created</th>
 					<th>Thread Name</th>					
@@ -17,7 +17,7 @@
 				<c:forEach items="${threads}" var="thread">
 					<tr>
 						<td><c:out value="${thread.dateTime}" /></td>
-						<td><a href="view_contributions?threadId=${thread.id}"><c:out value="${thread.name}" /></a></td>	
+						<td><a href="view_instructor_contributions?threadId=${thread.id}"><c:out value="${thread.name}" /></a></td>	
 						<c:if test="${thread.isActive == 'true'}">
 	  							<td>Active</td> 
 	  					</c:if> 
@@ -30,8 +30,8 @@
 						</c:forEach>			
 				</table>
                 </div>
-                <form name="formNewThread="form-horizontal" role="form"
-			action="<c:url value="/createthread?courseId=${courseId}"/>" method="post">
+                <form name="formNewThread" class="form-horizontal" 
+			action="<c:url value="/create_instructor_thread?courseId=${courseId}"/>" method="post">
                 <div class="form-group">
                 <label for="threadname" class="col-sm-2 control-label">Thread Name</label>
 				<div class="col-sm-6">
@@ -49,3 +49,4 @@
 		</form>
                 <!-- /.col-lg-12 -->
             </div>
+        </div>

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ocds.Dao.CourseComponent;
 import com.ocds.Dao.StudentComponent;
 import com.ocds.Dao.ThreadComponent;
+import com.ocds.Domain.CThread;
 import com.ocds.Domain.Contribution;
 import com.ocds.Domain.Course;
 import com.ocds.users.User;
@@ -54,105 +55,58 @@ public class StudentController {
 	 	model.addAttribute("courses",courses);
 	 	return "student_home";
 	}
-	/*
-	@RequestMapping(value = "/view_thread", method = RequestMethod.GET)
+	@RequestMapping(value = "/view_student_threads", method = RequestMethod.GET)
 	public String viewThread(@RequestParam(value = "courseId", required = true) String courseId,HttpSession session, ModelMap model)
 	{
-		List<CThread> threadList = threadComponent.getAllThreads(Integer.parseInt(courseId));
-		model.addAttribute("threads",threadList);
-		model.addAttribute("courseId", courseId);
-		return "student_class";
+		List<CThread> threads = threadComponent.getAllThreads(Integer.parseInt(courseId));
+		if (threads!=null)
+		model.addAttribute("threads",threads);
+		model.addAttribute("courseId",courseId);
+		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
+		model.addAttribute("courseName",course.getName());
+		return "student_threads";
 	}
 	
-	// @RequestMapping(value = "/createThread", method = RequestMethod.GET)
-	public String createThread(@RequestParam(value = "courseId", required = true) String courseId,
-							   @RequestParam(value = "name", required = true) String name,
-							   ModelMap modelmap)
-   {
-	   DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-	   Date date = new Date();
-	   CThread thread = new CThread(name, courseComponent.findCourseByID(Integer.parseInt(courseId)), dateFormat.format(date), "", true);
-	   threadComponent.createThread(thread);
-	   List<CThread> threads = threadComponent.getAllThreads(Integer.parseInt(courseId));
-	   modelmap.addAttribute("threads",threads);
-	   modelmap.addAttribute("courseId",courseId);
-	   return "student_class";
-   }
-	*/
-	
-	/*
-	@RequestMapping(value = "/deleteThread")
-	public String deleteThread(@RequestParam(value = "threadId", required = true) String threadId, ModelMap model)
+		@RequestMapping(value = "/view_student_contributions", method = RequestMethod.GET)
+	public String view_contributions(@RequestParam(value = "threadId", required = true) String threadId,HttpSession session, ModelMap model)
 	{
-		CThread thread = this.threadComponent.getThread(Long.parseLong(threadId));
-		int courseId = thread.getCourse().getId();
-		threadComponent.deleteThread(thread);
-		List<CThread> threads = threadComponent.getAllThreads(courseId);
-		model.addAttribute("threads", threads);
-		return "redirect:/student_class";
-	}*/
-	
-	/*@RequestMapping(value = "/createContribution")
+		List<Contribution> contributions = threadComponent.getAllContributions(Long.parseLong(threadId));
+		if (contributions!=null)
+		model.addAttribute("contributions",contributions);
+		model.addAttribute("threadId",threadId);
+		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
+		model.addAttribute("threadName",thread.getName());
+		return "student_contributions";
+	}
+	@RequestMapping(value = "/create_student_Contribution", method = RequestMethod.POST)
 	public String createContribution(@RequestParam(value = "threadId", required = true) String threadId,
-									 @RequestParam(value = "message", required = true) String message,
-									 @RequestParam(value = "attachment", required = true) String attachment,
-									 ModelMap modelmap, HttpSession session)
+							   @RequestParam(value = "message", required = true) String message,
+			                   HttpSession session,
+			                   ModelMap model)
 	{
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		Date date = new Date();
-		CThread thread = this.threadComponent.getThread(Long.parseLong(threadId));
-		Contribution contribute = new Contribution(message,
-												   attachment,
-												   false,
-												   session.getAttribute("loginuser").toString(),
-												   thread,
-												   null,
-												   dateFormat.format(date));
-		this.threadComponent.createContribution(contribute);
-		return "redirect:/student_contribution";
-	}/*
-	/*
-	//@RequestMapping(value = "/createContribution", method = RequestMethod.GET)
-	public String createContribution(@RequestParam(value = "threadId", required = true) String threadId, ModelMap modelmap, HttpSession session)
-	{
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		Date date = new Date();
-		Contribution newContribution = new Contribution("This is a test contribution",
-														"",
-														false,
-														session.getAttribute("loginuser").toString(),
-														this.threadComponent.getThread(Long.parseLong(threadId)),
-														0L,
-														dateFormat.format(date));
-		this.threadComponent.createContribution(newContribution);
+		Date date = new Date();			
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");	
+		String stringDate = dateFormat.format(date);
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		User user = userComponent.loadUserByUsername(loginuser);
+		String enteredBy = user.getFirstName() + " " + user.getLastName();
+		Contribution contribution = new Contribution(message,
+									    "",
+									    false,
+									    enteredBy,
+									    loginuser,
+									    threadComponent.getThread(Long.parseLong(threadId)),
+									    null,									    
+									    stringDate);
 		
-		List<Contribution> allContributions = this.threadComponent.getAllContributions(Long.parseLong(threadId));
-		
-		for (int i = 0; i < allContributions.size(); i++)
-		{
-			User user = this.userComponent.loadUserByUsername(allContributions.get(i).getContribution().getEnteredBy());
-			allContributions.get(i).setUserName(user.getFirstName() + " " + user.getLastName());
-		}
-		
-		modelmap.addAttribute("contributions",allContributions);
-		modelmap.addAttribute("threadId", threadId);
-		
-		return "redirect:/student_contribution";
+		this.threadComponent.createContribution(contribution);
+		List<Contribution> contributions = threadComponent.getAllContributions(Long.parseLong(threadId));
+		if (contributions!=null)
+		model.addAttribute("contributions",contributions);
+		model.addAttribute("threadId",threadId);
+		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
+		model.addAttribute("threadName",thread.getName());
+		return "student_contributions";
 	}
 	
-	@RequestMapping(value = "/getAllContributions", method = RequestMethod.GET)
-	public String getAllContributions(@RequestParam(value = "threadId", required = true) String threadId, ModelMap modelmap)
-	{
-		List<Contribution> allContributions = this.threadComponent.getAllContributions(Long.parseLong(threadId));
-		
-		for (int i = 0; i < allContributions.size(); i++)
-		{
-			User user = this.userComponent.loadUserByUsername(allContributions.get(i).getContribution().getEnteredBy());
-			allContributions.get(i).setUserName(user.getFirstName() + " " + user.getLastName());
-		}
-		
-		modelmap.addAttribute("contributions",allContributions);
-		modelmap.addAttribute("threadId", threadId);
-		return "/student_contribution";
-	}*/
-}
+	}

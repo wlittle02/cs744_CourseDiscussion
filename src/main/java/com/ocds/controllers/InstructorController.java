@@ -55,7 +55,7 @@ public class InstructorController {
 		return "instructor_threads";
 	}
 	
-	@RequestMapping(value = "/createthread", method = RequestMethod.POST)
+	@RequestMapping(value = "/create_instructor_thread", method = RequestMethod.POST)
 	public String createThread(@RequestParam(value = "courseId", required = true) String courseId,
 							   @RequestParam(value = "threadName", required = true) String threadName,
 			                   HttpSession session,
@@ -85,7 +85,7 @@ public class InstructorController {
 		return "instructor_threads";
 	}
 	
-	@RequestMapping(value = "/view_contributions", method = RequestMethod.GET)
+	@RequestMapping(value = "/view_instructor_contributions", method = RequestMethod.GET)
 	public String view_contributions(@RequestParam(value = "threadId", required = true) String threadId,HttpSession session, ModelMap model)
 	{
 		List<Contribution> contributions = threadComponent.getAllContributions(Long.parseLong(threadId));
@@ -96,7 +96,7 @@ public class InstructorController {
 		model.addAttribute("threadName",thread.getName());
 		return "instructor_contributions";
 	}
-	@RequestMapping(value = "/createContribution", method = RequestMethod.POST)
+	@RequestMapping(value = "/create_instructor_Contribution", method = RequestMethod.POST)
 	public String createContribution(@RequestParam(value = "threadId", required = true) String threadId,
 							   @RequestParam(value = "message", required = true) String message,
 			                   HttpSession session,
@@ -126,7 +126,7 @@ public class InstructorController {
 		model.addAttribute("threadName",thread.getName());
 		return "instructor_contributions";
 	}
-	@RequestMapping(value = "/setContribution", method = RequestMethod.GET)
+	@RequestMapping(value = "/set_instructor_Contribution", method = RequestMethod.GET)
 	public String setContribution(@RequestParam(value = "isImportant", required = true) Boolean isImportant,
 							   @RequestParam(value = "contributionId", required = true) Long contributionId,
 			                   HttpSession session,
