@@ -20,11 +20,7 @@ public class UserComponent implements UserDetailsService {
     @Override
     public User loadUserByUsername(final String username) throws UsernameNotFoundException {    	    	
         User user =  User.findUserByName(username);
-        System.out.println("found user(" + user + ")");
-        if (user == null) {
-            throw new UsernameNotFoundException("Invalid username/password.");
-        }
-
+        System.out.println("found user(" + user + ")");        
         return user;
     }
     
