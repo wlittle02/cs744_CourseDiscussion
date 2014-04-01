@@ -138,6 +138,7 @@ public class CourseComponent {
 		
 		course.setInstructor(null);
 		course.setStudents(null);
+		course.setTAs(null);
 		entitymanager.remove(entitymanager.merge(course));
 		
 		entitymanager.getTransaction().commit();  
@@ -506,5 +507,8 @@ public class CourseComponent {
 		entitymanager.close();
 		
 	}
+	
+	
+	//For the summarize
 	
 }
