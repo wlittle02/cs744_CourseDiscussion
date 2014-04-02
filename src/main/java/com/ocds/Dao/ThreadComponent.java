@@ -144,4 +144,42 @@ public class ThreadComponent {
 		else
 			return null;
 	}
+	
+	public void updateUserAttributes(String pUserName, String pFirstName, String pLastName)
+	{
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager();
+		entitymanager.getTransaction().begin();
+		
+		List<Contribution> contributions = entitymanager.createQuery("SELECT contribution FROM Contribution contribution WHERE contribution.username = ?1", Contribution.class)
+				.setParameter(1,  pUserName).getResultList();
+		
+		// Update the first and last name of the user
+		for (int i = 0; i < contributions.size(); i++)
+		{
+			contributions.get(i).setEnteredBy(pFirstName + " " + pLastName);
+			entitymanager.merge(contributions.get(i));
+		}
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+	}
+	
+	public void invalidateUserName(String pUserName)
+	{
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager();
+		entitymanager.getTransaction().begin();
+		
+		List<Contribution> contributions = entitymanager.createQuery("SELECT contribution FROM Contribution contribution WHERE contribution.username = ?1", Contribution.class)
+				.setParameter(1,  pUserName).getResultList();
+		
+		// Update the user name to an invalid form
+		for (int i = 0; i < contributions.size(); i++)
+		{
+			contributions.get(i).setUsername("");
+			entitymanager.merge(contributions.get(i));
+		}
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+	}
 }

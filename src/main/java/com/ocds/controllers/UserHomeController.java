@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.ocds.Dao.CourseComponent;
+import com.ocds.Dao.ThreadComponent;
 import com.ocds.users.*;
 
 
@@ -40,7 +41,8 @@ public class UserHomeController {
 	UserComponent userComponent;
 	@Autowired
 	CourseComponent courseComponent;
-	
+	@Autowired
+	ThreadComponent threadComponent;
 	
 			
 	
@@ -96,6 +98,7 @@ public class UserHomeController {
 		courseComponent.removeAllCoursesOfInstructor(username);
 		courseComponent.removeAllCoursesOfTa(username);
 		userComponent.deleteUser(username);
+		threadComponent.invalidateUserName(username);
 		return "redirect:/viewusers";
 	}
 	
@@ -125,6 +128,7 @@ public class UserHomeController {
         user.setEmail(email);   	        
         user.setAuthorities(null);   	
     	userComponent.updateUser(user,userroles);
+    	threadComponent.updateUserAttributes(userName, firstName, lastName);
 	    model.addAttribute("message", "Update success.");
 	
 	return "redirect:/viewusers";
