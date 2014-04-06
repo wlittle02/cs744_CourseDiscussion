@@ -3,6 +3,7 @@ package com.ocds.users;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -47,6 +48,26 @@ public class User implements UserDetails {
 	
 	public void addRole(Role role) {
 		authorities.add(role);
+	}
+	
+	public Set<Role> getRole()
+	{
+		return authorities;
+	}
+	
+	public Boolean hasRole(String pRole)
+	{
+		Boolean hasRole = false;
+		Iterator<Role> itr = authorities.iterator();
+		while (itr.hasNext())
+		{
+			if (itr.next().getAuthority().equals(pRole))
+			{
+				hasRole = true;
+				break;
+			}
+		}
+		return hasRole;
 	}
 	
 	public static User findUserByName(String name) {
