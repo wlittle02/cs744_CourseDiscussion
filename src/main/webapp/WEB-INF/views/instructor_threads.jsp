@@ -13,6 +13,7 @@
 					<th>Date Created</th>
 					<th>Thread Name</th>					
 					<th>Status</th>
+					<th>Summary</th>
 				</tr>	
 				<c:forEach items="${threads}" var="thread">
 					<tr>
@@ -24,7 +25,9 @@
 	  					<c:if test="${thread.isActive != 'true'}">
 	  							<td>Inactive</td> 
 	  					</c:if>					
-						
+						<td>
+							<a href="summarize_thread?thread_id=${thread.id}">Summary</a>
+						</td>
 						
 						</tr>
 						</c:forEach>			

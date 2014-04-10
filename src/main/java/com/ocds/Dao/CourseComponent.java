@@ -1,6 +1,5 @@
 package com.ocds.Dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -10,6 +9,8 @@ import javax.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ocds.Domain.CThread;
+import com.ocds.Domain.Contribution;
 import com.ocds.Domain.Course;
 import com.ocds.users.User;
 
@@ -508,7 +509,147 @@ public class CourseComponent {
 		
 	}
 	
+	//For the summary of Thread
+	public List<Contribution> getContributionForSummary(Long thread_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		List<Contribution> list_contri = entitymanager.createQuery
+				("SELECT contri FROM Contribution contri WHERE "
+						+ "contri.thread.id = ?1 and contri.isImportant = 1"
+						+ " order by contri.summaryId", Contribution.class)
+				.setParameter(1, thread_id).getResultList();
+		
+		Long count;
+		if(list_contri.get(list_contri.size()-1).getSummaryId() == null){
+			count = 0L;
+		}else{
+			count = list_contri.get(list_contri.size()-1).getSummaryId();
+		}
+			
+		Long consistent_count = 1L;
+		
+		for(int i=0; i<list_contri.size(); i++){
+			if(list_contri.get(i).getSummaryId() == null){
+				count++;
+				list_contri.get(i).setSummaryId(count);
+				entitymanager.merge(list_contri.get(i));
+			}else{
+				if(list_contri.get(i).getSummaryId() != consistent_count ){
+					list_contri.get(i).setSummaryId(consistent_count);
+					entitymanager.merge(list_contri.get(i));
+				}
+				consistent_count ++;
+			}
+				
+		}
+		
+		entitymanager.getTransaction().commit();
+		
+		entitymanager.getTransaction().begin();
+		list_contri = entitymanager.createQuery
+				("SELECT contri FROM Contribution contri WHERE "
+						+ "contri.thread.id = ?1 and contri.isImportant = 1"
+						+ " order by contri.summaryId", Contribution.class)
+				.setParameter(1, thread_id).getResultList();
+		entitymanager.getTransaction().commit();
+		
+		entitymanager.close();
+		return list_contri;
+	}
 	
-	//For the summarize
+	public Contribution getContributionByID(Long contribution_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();		
+		
+		List<Contribution> list = entitymanager.createQuery
+				("SELECT contri FROM Contribution contri WHERE "
+						+ "contri.id = ?1 ", Contribution.class)
+				.setParameter(1, contribution_id).getResultList();
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		
+		if(list.size() == 0)
+			return null;
+		else
+			return list.get(0);
+	}
+	
+	public List<Contribution> getContributionLargerThan(Long contribution_id, Long thread_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		List<Contribution> list_contri = entitymanager.createQuery
+				("SELECT contri FROM Contribution contri WHERE "
+						+ "contri.thread.id = ?1 and contri.summaryId >?2 and contri.isImportant = 1"
+						+ " order by contri.summaryId", Contribution.class)
+				.setParameter(1, thread_id).setParameter(2, contribution_id).getResultList();
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		return list_contri;
+	}
+	
+	public List<Contribution> getContributionLessThan(Long contribution_id, Long thread_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		List<Contribution> list_contri = entitymanager.createQuery
+				("SELECT contri FROM Contribution contri WHERE "
+						+ "contri.thread.id = ?1 and contri.summaryId <?2 and contri.isImportant = 1"
+						+ " order by contri.summaryId", Contribution.class)
+				.setParameter(1, thread_id).setParameter(2, contribution_id).getResultList();
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		return list_contri;
+	}
+	
+	public void updateSummaryID(Long contribution_id, Long update_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		Contribution contri = entitymanager.createQuery
+				("SELECT contri FROM Contribution contri WHERE "
+						+ "contri.id = ?1 ", Contribution.class)
+				.setParameter(1, contribution_id).getResultList().get(0);
+		
+		contri.setSummaryId(update_id);
+		entitymanager.merge(contri);
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+	}
+	
+	public CThread getThreadByID(Long thread_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		CThread thread = entitymanager.createQuery
+				("SELECT thread FROM CThread thread WHERE "
+						+ "thread.id = ?1 ", CThread.class)
+				.setParameter(1, thread_id).getResultList().get(0);
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+		return thread;
+	}
+	
+	public void setThreadInactive(Long thread_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();
+		
+		CThread thread = entitymanager.createQuery
+				("SELECT thread FROM CThread thread WHERE "
+						+ "thread.id = ?1 ", CThread.class)
+				.setParameter(1, thread_id).getResultList().get(0);
+		
+		thread.setIsActive(false);
+		entitymanager.merge(thread);
+		entitymanager.getTransaction().commit();
+		entitymanager.close();
+	}
+	
+	//Trival
 	
 }

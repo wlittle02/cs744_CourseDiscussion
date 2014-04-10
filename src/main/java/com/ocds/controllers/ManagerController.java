@@ -1,27 +1,27 @@
 package com.ocds.controllers;
 
 //Test github 
+import java.io.File;
 import java.security.Principal;
 import java.util.Calendar;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.ocds.Dao.CourseComponent;
+import com.ocds.Domain.Contribution;
 import com.ocds.Domain.Course;
-import com.ocds.users.Role;
 import com.ocds.users.User;
 
 @Controller
@@ -63,6 +63,19 @@ public class ManagerController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String defaultPage() {
+		
+		//coursecomponent.updateSummaryID(2L, 6L);
+		//List<Contribution> list = coursecomponent.getContributionForSummary(1L);
+		List<Contribution> list = coursecomponent.getContributionLessThan(1L, 1L);
+		
+		for(Contribution c : list){
+			System.out.println(c.getId());
+			System.out.println(c.getSummaryId());
+			System.out.println(c.getMessage());
+			System.out.println("------");
+		}
+			
+			
 		return "redirect:/login";
 	}
 	
@@ -265,18 +278,91 @@ public class ManagerController {
 		
 		return "redirect:/signta_course?id=" + id;
 	}
-	/*
-	@RequestMapping(value = "/removestudent_course", method = RequestMethod.POST)
-	public String removeStudent(
-			@RequestParam(value = "id", required = true) int id, 
-			@RequestParam(value = "to_remove", required = true) List<Long> student_ids, 
+	
+	@RequestMapping(value = "/summarize_thread", method = RequestMethod.GET)
+	public String summarizeThread(
+			@RequestParam(value = "thread_id", required = true) Long thread_id, 
 			HttpSession session, ModelMap model) {
 			
-		coursecomponent.removeStudentFromCourse(id, student_ids);
-		
-		return "redirect:/enrollstudent_course?id=" + id;
+		model.addAttribute("thread", coursecomponent.getThreadByID(thread_id));
+		model.addAttribute("contributions",coursecomponent.getContributionForSummary(thread_id));
+		return "instructor_summary";
 	}
 	
-	*/
-	//End of Course
+	@RequestMapping(value = "/reorder_contribution", method = RequestMethod.GET)
+	public String reorderContribution(
+			@RequestParam(value = "thread_id", required = true) Long thread_id,
+			@RequestParam(value = "contribution_id", required = true) Long contribution_id,
+			@RequestParam(value = "move", required = true) String move,
+			HttpSession session, ModelMap model){
+		
+		if(move.equals("up")){
+			Long temp = coursecomponent.getContributionByID(contribution_id).getSummaryId();
+			List<Contribution> list = coursecomponent
+					.getContributionLessThan(temp, thread_id);
+			if(list.size() != 0){
+				coursecomponent.updateSummaryID(contribution_id, list.get(list.size()-1).getSummaryId());
+				coursecomponent.updateSummaryID(list.get(list.size()-1).getId(), temp);
+			}
+		}else if(move.equals("down")){
+			Long temp = coursecomponent.getContributionByID(contribution_id).getSummaryId();
+			List<Contribution> list = coursecomponent
+					.getContributionLargerThan(temp, thread_id);
+			if(list.size() != 0){
+				coursecomponent.updateSummaryID(contribution_id, list.get(0).getSummaryId());
+				coursecomponent.updateSummaryID(list.get(0).getId(), temp);
+			}
+		}else{
+			System.out.println("error(reorderContribution)!");
+		}
+		return "redirect:/summarize_thread?thread_id=" + thread_id;
+	}
+	
+	@RequestMapping(value = "/shutdown_thread", method = RequestMethod.GET)
+	public String shutDownThread(
+			@RequestParam(value = "thread_id", required = true) Long thread_id, 
+			HttpSession session, ModelMap model) {
+		
+		coursecomponent.setThreadInactive(thread_id);
+		return "redirect:/view_instructor_threads?courseId=" + coursecomponent.getThreadByID(thread_id).getCourse().getId();
+	}
+		
+	@RequestMapping(value = "/upload", method = RequestMethod.GET)
+	public String handleFormUpload(HttpServletRequest req) {
+		
+		return "upload";
+	}
+	
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public String handleFormUpload(@RequestParam("name") String name,
+			@RequestParam("file") CommonsMultipartFile mFile,
+			HttpServletRequest req) {
+		System.out.println("I was Here");
+		if (!mFile.isEmpty()) {
+			String path = "C:/";
+			System.out.println(path);
+
+			File file = new File(path + new Date().getTime());
+			System.out.println(file.getAbsolutePath());
+			try {
+				mFile.getFileItem().write(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return "redirect:";
+		} else {
+			return "redirect:";
+		}
+	}
+	/*@RequestMapping(value = "/summarize_thread", method = RequestMethod.POST)
+	public String summarize_thread(
+			@RequestParam(value = "id", required = true) int id,
+			@RequestParam(value = "new_ids", required = true) List<Long> new_ids,
+			@RequestParam(value = "old_ids", required = true) List<Long> old_ids,
+			HttpSession session, ModelMap model) {
+			
+		
+		return "redirect:/signta_course?id=" + id;
+	}*/
 }
