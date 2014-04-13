@@ -55,6 +55,14 @@ public class InstructorController {
 		return "instructor_threads";
 	}
 	
+	/**
+	 * User to create new threads by the instructor. This action is attached to the submit button
+	 * @param courseId
+	 * @param threadName
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/create_instructor_thread", method = RequestMethod.POST)
 	public String createThread(@RequestParam(value = "courseId", required = true) String courseId,
 							   @RequestParam(value = "threadName", required = true) String threadName,
@@ -82,6 +90,7 @@ public class InstructorController {
 		model.addAttribute("threads",threads);
 		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
 		model.addAttribute("courseName",course.getName());
+		model.addAttribute("courseId", course.getId());
 		return "instructor_threads";
 	}
 	
