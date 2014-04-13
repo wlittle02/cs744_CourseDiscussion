@@ -81,8 +81,7 @@ public class UserHomeController {
 	
 	@RequestMapping(value = "/modify")
 	@Secured(value = { "ROLE_ADMIN" })
-	public String deleteUser(@RequestParam(value = "username", required = true) String username,HttpSession session, ModelMap model) {
-			
+	public String deleteUser(@RequestParam(value = "username", required = true) String username,HttpSession session, ModelMap model) {			
 		User user = userComponent.loadUserByUsername(username);
 		model.addAttribute("user", user);
 		String loginuser = (String) session.getAttribute( "loginuser" );
@@ -116,13 +115,19 @@ public class UserHomeController {
 				userroles.add("ROLE_ADMIN");
 		for(int i=0;i<userroles.size();i++)
 			System.out.println(userroles.get(i));
-		User user =  User.findUserByName(userName);
-        
+		User user =  User.findUserByName(userName);        
         if (user == null) {        	
         	model.addAttribute("updateerror", true);
         	return "redirect:/viewusers";
             
-        }        
+        }  
+        if (user.hasRole("ROLE_INSTRUCTOR") && !userroles.contains("ROLE_INSTRUCTOR"))
+        	courseComponent.removeAllCoursesOfInstructor(userName);
+        if (user.hasRole("ROLE_TA") && !userroles.contains("ROLE_TA"))
+        	courseComponent.removeAllCoursesOfTa(userName);
+        if (user.hasRole("ROLE_STUDENT") && !userroles.contains("ROLE_STUDENT"))
+        	courseComponent.removeAllCoursesOfStudent(userName);
+        user.getAuthorities();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);   	        

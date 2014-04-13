@@ -105,13 +105,13 @@
 <!--                         <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a> -->
 <!--                     </li> -->
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Reports<span class="fa arrow"></span></a>
+                        <a ><i class="fa fa-wrench fa-fw"></i> Reports<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="panels-wells.html">Single Course</a>
                             </li>
                             <li>
-                                <a href="buttons.html">All Courses</a>
+                                <a href="<c:url value="/courses_report"/>">All Courses</a>
                             </li>
                             
                         </ul>
