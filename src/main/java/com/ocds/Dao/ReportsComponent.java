@@ -135,6 +135,8 @@ public class ReportsComponent {
 	{
 		Boolean result = false;
 		User user = userComponent.loadUserByUsername(pUserName);
+		if (user == null)
+			return result;
 		switch(pRoleType)
 		{
 		case EStudent:
