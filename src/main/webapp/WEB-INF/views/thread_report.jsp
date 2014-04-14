@@ -13,20 +13,24 @@
                 <div>
 				<table class="table table-striped table-bordered" >
 					<tr>
-					<th>Thread Name</th>
-					<th>Total</th>
+					<th  rowspan="2" >Thread Name</th>
+					<th rowspan="2">Total Contributions</th>
+					<th colspan="3">Number of Contributions By</th>
+					<tr>
 					<th>Instructor</th>
 					<th>Student</th>
 					<th>TA</th>
 				</tr>
 				<c:forEach items="${threads}" var="thread">
 					<tr>
-						<td><c:out value="${thread.name}"/></td>
-						<td><c:out value="${contcountmap}"/></td>
-						<%-- <c:forEach items="${contcountmap.get(thread.id)}" var="entry">
-							<td><c:out value="${entry.key}" /></td>
-   						</c:forEach> --%>
-						
+						<td><c:out value="${thread.name}"/></td>						
+						<c:forEach items="${contcountmap}" var="entry">
+							<c:if test="${entry.key == thread.id}">
+								<c:forEach items="${entry.value}" var="keyvalue">
+	              					<td>${keyvalue}</td>
+	       						</c:forEach> 
+							</c:if>
+   						</c:forEach>						
 					</tr>
 				</c:forEach>
 				</table>

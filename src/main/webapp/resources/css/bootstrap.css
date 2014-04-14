@@ -270,6 +270,7 @@ table {
   .table td,
   .table th {
     background-color: #fff !important;
+    align:center;
   }
   .btn > .caret,
   .dropup > .btn > .caret {

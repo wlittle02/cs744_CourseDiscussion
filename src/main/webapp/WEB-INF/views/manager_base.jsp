@@ -13,6 +13,7 @@
 
     <!-- Core CSS - Include with every page -->
     <link href="resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="resources/css/bootstrap.css" rel="stylesheet">
     <link href="resources/css/css/font-awesome.css" rel="stylesheet">
 
     <!-- Page-Level Plugin CSS - Blank -->
@@ -105,8 +106,8 @@
 <!--                         <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a> -->
 <!--                     </li> -->
                     <li>
-                        <a ><i class="fa fa-wrench fa-fw"></i> Reports<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
+                        <a href="<c:url value="/courses_report"/>" ><i class="fa fa-wrench fa-fw"></i> Reports</a>
+                        <%-- <ul class="nav nav-second-level">
                             <li>
                                 <a href="panels-wells.html">Single Course</a>
                             </li>
@@ -114,7 +115,7 @@
                                 <a href="<c:url value="/courses_report"/>">All Courses</a>
                             </li>
                             
-                        </ul>
+                        </ul> --%>
                         <!-- /.nav-second-level -->
                     </li>
      <!--                <li>

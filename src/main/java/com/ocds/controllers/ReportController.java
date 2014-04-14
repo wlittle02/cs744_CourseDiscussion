@@ -62,7 +62,7 @@ public class ReportController {
 									@RequestParam(value = "startdate", required = true) String date,
 									@RequestParam(value = "report_type", required = true) String report_type) {	
 		try{
-			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");			
+			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");			
 			Date dt = formatter.parse(date);			
 			List<Course> courses = coursecomponent.getAllCourses();
 			model.addAttribute("courses",courses);
@@ -102,10 +102,10 @@ public class ReportController {
 	{
 		try
 		{
-			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 			
 			Date dt = formatter.parse(date);
-			HashMap<Integer,HashMap<Integer,Integer>> contcountmap = new HashMap<Integer,HashMap<Integer,Integer>>();
+			HashMap<Long,ArrayList<Integer>> contcountmap = new HashMap<Long,ArrayList<Integer>>();
 			List<CThread> threads = this.threadcomponent.getAllThreads(courseId);
 			for (int i = 0; i < threads.size(); i++)
 			{
@@ -113,7 +113,7 @@ public class ReportController {
 				Integer instrcount = 0;
 				Integer tacount = 0;
 				Integer studcount = 0;
-				HashMap<Integer,Integer> cont = new HashMap<Integer,Integer>();
+				ArrayList<Integer> contributionscount = new ArrayList<Integer>();
 				if (report_type.equalsIgnoreCase("Weekly"))
 				{
 					totalcount = reportscomponent.getContributionTotal(TimeType.EWeekly, dt, threads.get(i).getId(), RoleType.EAll);
@@ -135,11 +135,12 @@ public class ReportController {
 					tacount = reportscomponent.getContributionTotal(TimeType.EYearly, dt, threads.get(i).getId(), RoleType.ETa);
 					studcount = reportscomponent.getContributionTotal(TimeType.EYearly, dt, threads.get(i).getId(), RoleType.EStudent);
 				}
-				cont.put(0,totalcount);
-				cont.put(1,instrcount);
-				cont.put(2,tacount);
-				cont.put(3,studcount);
-				contcountmap.put(Integer.parseInt(threads.get(i).getId().toString()), cont);
+				System.out.println(totalcount);
+				contributionscount.add(0, totalcount);
+				contributionscount.add(1,instrcount);
+				contributionscount.add(2,tacount);
+				contributionscount.add(3,studcount);
+				contcountmap.put(threads.get(i).getId(), contributionscount);
 			}
 			model.addAttribute("threads", threads);
 			model.addAttribute("contcountmap", contcountmap);
