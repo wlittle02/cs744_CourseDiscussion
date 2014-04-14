@@ -46,19 +46,10 @@
 				<c:forEach items="${courses}" var="course">
 					<tr>
 						<td><c:out value="${course.id_num}" /></td>
-						<td><a href="view_ta_threads?courseId=${course.id}"><c:out value="${course.name}"/></a></td>
-						<c:if test="${threadcountmap}" >
-							<c:forEach items="${threadcountmap}" var="entry">
-								<td><c:out value="${entry.key}" /></td>
-								<%-- <c:if test="${entry.key == course.id}">
-									<td>"${entry.value}"</td>
-							    </c:if>     --%>     
-	   						</c:forEach>
-						
-						<%-- <td>
-						<c:out value="${threadcountmap['course.id']}"/>
-						<c:out value='${threadcountmap[course.id]}'/> </td> --%>
-						</c:if> 
+						<td><a href="get_contribution_report?courseId=${course.id}&startdate=${start_date}&report_type=${reporttype}"><c:out value="${course.name}"/></a></td>
+						<c:forEach items="${threadcountmap}" var="entry">
+							<td><c:out value="${entry.key}" /></td>   
+   						</c:forEach>
 					</tr>
 				</c:forEach>
 				</table>
