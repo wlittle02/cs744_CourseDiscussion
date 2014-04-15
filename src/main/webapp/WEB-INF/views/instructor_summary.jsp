@@ -68,41 +68,14 @@
 							</c:if>
 
 						<td>
-						<c:if test="${thread.isActive == 'true'}">
-						<c:if test="${contribution.isImportant == 'true'}">
-								<a
-									href="set_instructor_Contribution?isImportant=false&contributionId=${contribution.id}">
-									<img border="0"
-									src="<c:url value="/resources/images/yellowstar.jpg"/>"
-									width="20" height="20">
-								</a>
-							</c:if> <c:if test="${contribution.isImportant != 'true'}">
-								<a
-									href="set_instructor_Contribution?isImportant=true&contributionId=${contribution.id}">
-									<img border="0"
-									src="<c:url value="/resources/images/white_star.jpg"/>"
-									width="20" height="20">
-								</a>
-							</c:if> <br /> 
-							</c:if>
-							
-							<c:if test="${thread.isActive == 'false'}">
-						<c:if test="${contribution.isImportant == 'true'}">
-								
-									<img border="0"
-									src="<c:url value="/resources/images/yellowstar.jpg"/>"
-									width="20" height="20">
-								
-							</c:if> <c:if test="${contribution.isImportant != 'true'}">
-								
-									<img border="0"
-									src="<c:url value="/resources/images/white_star.jpg"/>"
-									width="20" height="20">
-							</c:if> <br /> 
-							</c:if>
+						
 							
 							<c:out value="${contribution.dateTime}" /><br /> <c:out
-								value="${contribution.enteredBy}" /></td>
+								value="${contribution.enteredBy}" />
+								</br>
+								<c:if test="${contribution.attachment != ''}">
+							<a href="download?fileName=${contribution.attachment}">Attachment</a>
+						</c:if>	</td>
 						<td><c:out value="${contribution.message}" /> <br /> <c:out
 								value="${contribution.attachment}" /></td>
 					</tr>

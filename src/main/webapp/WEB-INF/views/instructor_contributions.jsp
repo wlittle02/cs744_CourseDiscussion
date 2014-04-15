@@ -8,6 +8,25 @@ $(document).ready(function(){
 		  document.getElementsByName("name")[0].value = document.getElementsByName("file")[0].value;
 	  });
 });
+
+$(document).ready(function (){
+	/* for(var i in ${contributions}){
+		alert(i);
+	}  */
+	var arr = "${contributions}";
+	var current_size  = arr.split(',').length;
+
+	while(setTimeout("",10000)){
+		alert(current_size);
+		current_size ++;
+	};
+	
+	//var arr = ${contributions};
+	//var size = arr.length;
+	//alert(arr);
+	//var t=setTimeout("alert(arr)"",0);
+}); 
+
 </script>
 
 
