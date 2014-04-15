@@ -30,9 +30,12 @@
 						</c:forEach>			
 				</table>
                 </div>
+                <c:if test="${threadActive == 'true'}">
                 <form name="formNewThread=" class="form-horizontal"
 			action="<c:url value="/create_instructor_Contribution?threadId=${threadId}"/>" method="post">
-                <div class="form-group">                
+                
+                <div class="form-group">
+                                
 				<div class="col-lg-10">					
 						<textarea class="form-control" name="message" id="message" cols="40" rows="6" required ></textarea>
 				</div>
@@ -40,9 +43,12 @@
 				<div class="col-sm-3" >				
 				<br/>
 					<button type="submit" class="btn btn-primary" >Post</button>
-				</div>				
+				</div>	
+						
 			</div>
+			
 		</form>
+		</c:if>	
                 <!-- /.col-lg-12 -->
             </div>
    </div>

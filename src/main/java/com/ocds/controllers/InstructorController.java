@@ -103,6 +103,7 @@ public class InstructorController {
 		model.addAttribute("threadId",threadId);
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
+		model.addAttribute("threadActive", thread.getIsActive());
 		return "instructor_contributions";
 	}
 	@RequestMapping(value = "/create_instructor_Contribution", method = RequestMethod.POST)
@@ -133,6 +134,7 @@ public class InstructorController {
 		model.addAttribute("threadId",threadId);
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
+		model.addAttribute("threadActive", thread.getIsActive());
 		return "instructor_contributions";
 	}
 	@RequestMapping(value = "/set_instructor_Contribution", method = RequestMethod.GET)
@@ -152,6 +154,7 @@ public class InstructorController {
 		model.addAttribute("threadId",threadId);
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
+		model.addAttribute("threadActive", thread.getIsActive());
 		return "instructor_contributions";
 	}
 }

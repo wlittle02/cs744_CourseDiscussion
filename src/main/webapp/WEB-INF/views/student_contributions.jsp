@@ -28,6 +28,7 @@
 						</c:forEach>			
 				</table>
                 </div>
+                <c:if test="${threadActive == 'true'}">
                 <form name="formNewThread=" class="form-horizontal"
 			action="<c:url value="/create_student_Contribution?threadId=${threadId}"/>" method="post">
                 <div class="form-group">                
@@ -41,6 +42,7 @@
 				</div>				
 			</div>
 		</form>
+		</c:if>
                 <!-- /.col-lg-12 -->
             </div>
    </div>

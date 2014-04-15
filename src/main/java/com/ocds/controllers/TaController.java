@@ -64,6 +64,7 @@ public class TaController {
 		model.addAttribute("threadId",threadId);
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
+		model.addAttribute("threadActive", thread.getIsActive());
 		return "ta_contributions";
 	}
 	@RequestMapping(value = "/create_ta_Contribution", method = RequestMethod.POST)
@@ -94,6 +95,7 @@ public class TaController {
 		model.addAttribute("threadId",threadId);
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
+		model.addAttribute("threadActive", thread.getIsActive());
 		return "ta_contributions";
 	}
 	@RequestMapping(value = "/set_ta_Contribution", method = RequestMethod.GET)
@@ -113,6 +115,7 @@ public class TaController {
 		model.addAttribute("threadId",threadId);
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
+		model.addAttribute("threadActive", thread.getIsActive());
 		return "ta_contributions";
 	}
 }

@@ -76,6 +76,7 @@ public class StudentController {
 		model.addAttribute("threadId",threadId);
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
+		model.addAttribute("threadActive", thread.getIsActive());
 		return "student_contributions";
 	}
 	@RequestMapping(value = "/create_student_Contribution", method = RequestMethod.POST)
@@ -106,6 +107,7 @@ public class StudentController {
 		model.addAttribute("threadId",threadId);
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
+		model.addAttribute("threadActive", thread.getIsActive());
 		return "student_contributions";
 	}
 	
