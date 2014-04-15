@@ -18,7 +18,15 @@
 				<c:forEach items="${threads}" var="thread">
 					<tr>
 						<td><c:out value="${thread.dateTime}" /></td>
-						<td><a href="view_instructor_contributions?threadId=${thread.id}"><c:out value="${thread.name}" /></a></td>	
+						<td>
+							<c:if test="${thread.isActive == 'true'}">
+								<a href="view_instructor_contributions?threadId=${thread.id}">
+								<c:out value="${thread.name}" /></a>
+							</c:if>
+							<c:if test="${thread.isActive != 'true'}">
+								<c:out value="${thread.name}" />
+							</c:if>	
+						</td>	
 						<c:if test="${thread.isActive == 'true'}">
 	  							<td>Active</td> 
 	  					</c:if> 

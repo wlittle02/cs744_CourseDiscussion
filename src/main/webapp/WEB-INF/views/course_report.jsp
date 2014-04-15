@@ -4,27 +4,60 @@
 <%@ page import="java.util.*" %>
 
 <%@ page session="false" %>
- <link href="resources/css/bootstrap.css" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Datepicker - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+  $(function() {
+    $( "#startdate" ).datepicker();
+  });
+  </script>
+</head>
+
  <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Reports</h1>
                 </div>
-                <form name="formregister" class="form-horizontal" action="<c:url value="/get_courses_report"/>" method="post">
+                <form name="formreport" class="form-horizontal" action="<c:url value="/get_courses_report"/>" method="post">
+			
+			 
 			<div class="form-group">
 				<label for="startdate" class="col-sm-2 control-label">Select start date
 					*</label>
-				<div class="col-sm-6">
-					<input name="startdate" id="startdate" type="text" class="form-control"
-						required />
-				</div>
+					<div class="col-sm-6">
+<%-- 					<c:if test="${start_date}"> --%>
+					<input name="startdate" type="text" id="startdate" class="form-control"  required >
+<%-- 					</c:if> --%>
+					</div>								
 			</div>			
 			<div class="form-group">
 				<label for="report_type" class="col-sm-2 control-label">Select Report Type
 					*</label>
 				<div class="col-sm-6">
 					<select name="report_type" id="report_type" class="form-control" required>
+						<c:if test="${reporttype == 'Weekly'}">
+						<option selected>Weekly</option>
+						</c:if>
+						<c:if test="${reporttype != 'Weekly'}">
 						<option>Weekly</option>
+						</c:if>
+						<c:if test="${reporttype == 'Weekly'}">
+						<option selected>Monthly</option>
+						</c:if>
+						<c:if test="${reporttype != 'Weekly'}">
+						<option>Monthly</option>
+						</c:if>
+						<c:if test="${reporttype == 'Weekly'}">
+						<option selected>Yearly</option>
+						</c:if>
+						<c:if test="${reporttype != 'Weekly'}">
+						<option>Yearly</option>
+						</c:if>
 						<option>Monthly</option>
 						<option>Yearly</option>						
 					</select>
@@ -60,4 +93,4 @@
                 <!-- /.col-lg-12 -->
             </div>
  </div>
-            
+ 

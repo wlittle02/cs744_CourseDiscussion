@@ -42,9 +42,7 @@
 				</tr>
 				<tr>
 					<td><c:out value="${thread.dateTime}" /></td>
-					<td><a
-						href="view_instructor_contributions?threadId=${thread.id}"><c:out
-								value="${thread.name}" /></a></td>
+					<td><c:out value="${thread.name}" /></td>
 					<c:if test="${thread.isActive == 'true'}">
 						<td>Active</td>
 					</c:if>

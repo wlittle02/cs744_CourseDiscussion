@@ -89,4 +89,8 @@ public class SetupMockDataController {
 		
 		return "redirect:login";
 	}	
+	@RequestMapping(value="/test")
+	public String test() {
+		return "test";
+	}
 }

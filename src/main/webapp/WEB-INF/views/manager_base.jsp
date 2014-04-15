@@ -10,12 +10,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Online Course Discussion System</title>
+    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+   -->
+  
 
     <!-- Core CSS - Include with every page -->
     <link href="resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="resources/css/bootstrap.css" rel="stylesheet">
     <link href="resources/css/css/font-awesome.css" rel="stylesheet">
-
+	
     <!-- Page-Level Plugin CSS - Blank -->
 
     <!-- SB Admin CSS - Include with every page -->
@@ -107,6 +112,7 @@
 <!--                     </li> -->
                     <li>
                         <a href="<c:url value="/courses_report"/>" ><i class="fa fa-wrench fa-fw"></i> Reports</a>
+<%--                         <a href="<c:url value="/test"/>" ><i class="fa fa-wrench fa-fw"></i> Reports</a> --%>
                         <%-- <ul class="nav nav-second-level">
                             <li>
                                 <a href="panels-wells.html">Single Course</a>
@@ -181,8 +187,13 @@
     <!-- SB Admin Scripts - Include with every page -->
     <script src="resources/js/js/sb-admin.js"></script>
 
+
     <!-- Page-Level Demo Scripts - Blank - Use for reference -->
 
 </body>
+
+
+
+
 
 </html>
