@@ -521,10 +521,17 @@ public class CourseComponent {
 				.setParameter(1, thread_id).getResultList();
 		
 		Long count;
-		if(list_contri.get(list_contri.size()-1).getSummaryId() == null){
+		if (list_contri.size() > 0)
+		{
+			if(list_contri.get(list_contri.size()-1).getSummaryId() == null){
+				count = 0L;
+			}else{
+				count = list_contri.get(list_contri.size()-1).getSummaryId();
+			}
+		}
+		else
+		{
 			count = 0L;
-		}else{
-			count = list_contri.get(list_contri.size()-1).getSummaryId();
 		}
 			
 		Long consistent_count = 1L;
