@@ -140,12 +140,53 @@ public class CourseComponent {
 		course.setInstructor(null);
 		course.setStudents(null);
 		course.setTAs(null);
+		
+		deleteThread(course.getId());
 		entitymanager.remove(entitymanager.merge(course));
 		
 		entitymanager.getTransaction().commit();  
 		entitymanager.close(); 
 	}
 	
+	public void deleteThread(int course_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();  
+
+		List<CThread> list = entitymanager
+				.createQuery("SELECT thread FROM CThread thread where thread.course.id = ?1", CThread.class)
+				.setParameter(1, course_id)
+				.getResultList();
+
+		for(CThread thread : list){
+			deleteContribution(thread.getId());
+			thread.setCourse(null);
+			entitymanager.remove(entitymanager.merge(thread));
+			
+		}
+		
+		entitymanager.getTransaction().commit();  
+		entitymanager.close();
+	}
+	
+	public void deleteContribution(Long thread_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();  
+
+		List<Contribution> list = entitymanager
+				.createQuery("SELECT contribution FROM Contribution contribution where contribution.thread.id = ?1", Contribution.class)
+				.setParameter(1, thread_id)
+				.getResultList();
+
+		for(Contribution contri : list){
+			contri.setThread(null);
+			entitymanager.remove(entitymanager.merge(contri));
+			
+		}
+		
+		entitymanager.getTransaction().commit();  
+		entitymanager.close();
+		
+	}
 	
 	
 	

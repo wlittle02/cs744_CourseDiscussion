@@ -198,6 +198,7 @@ public class ManagerController {
 			
 		Course course = coursecomponent.findCourseByID(id);
 		
+		
 		coursecomponent.deleteCourse(course);
 		
 		String loginuser = (String) session.getAttribute( "loginuser" );
