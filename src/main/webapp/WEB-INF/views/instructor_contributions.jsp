@@ -2,6 +2,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
 
+<script>
+$(document).ready(function(){
+	  $("#upload_submit").click(function(){
+		  document.getElementsByName("name")[0].value = document.getElementsByName("file")[0].value;
+	  });
+});
+</script>
+
+
  <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
@@ -22,17 +31,21 @@
 	  					</c:if>	
 	  					<br/>
 						<c:out value="${contribution.dateTime}" /><br/>
-						<c:out value="${contribution.enteredBy}" /></td>	
-						<td><c:out value="${contribution.message}" />
+						<c:out value="${contribution.enteredBy}" />
 						<br/>
-						<c:out value="${contribution.attachment}" /></td>
+						<c:if test="${contribution.attachment != ''}">
+							<a href="download?fileName=${contribution.attachment}">Attachment</a>
+						</c:if>	
+						</td>	
+						<td><c:out value="${contribution.message}" />
+						<br/></td>
 						</tr>
 						</c:forEach>			
 				</table>
                 </div>
                 <c:if test="${threadActive == 'true'}">
                 <form name="formNewThread=" class="form-horizontal"
-			action="<c:url value="/create_instructor_Contribution?threadId=${threadId}"/>" method="post">
+			action="<c:url value="/create_instructor_Contribution?threadId=${threadId}"/>" method="post" enctype="multipart/form-data">
                 
                 <div class="form-group">
                                 
@@ -40,9 +53,16 @@
 						<textarea class="form-control" name="message" id="message" cols="40" rows="6" required ></textarea>
 				</div>
 				
+				<div class="col-sm-6">
+				<br/>
+					<input type="hidden" name="name" />
+					<input name="file" type="file" class="form-control"
+						 />
+				</div>
+				
 				<div class="col-sm-3" >				
 				<br/>
-					<button type="submit" class="btn btn-primary" >Post</button>
+					<button type="submit" class="btn btn-primary" id="upload_submit" >Post</button>
 				</div>	
 						
 			</div>

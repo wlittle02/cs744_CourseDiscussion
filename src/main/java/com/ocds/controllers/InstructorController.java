@@ -1,5 +1,6 @@
 package com.ocds.controllers;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.ocds.users.User;
 import com.ocds.users.UserComponent;
@@ -109,7 +111,9 @@ public class InstructorController {
 	@RequestMapping(value = "/create_instructor_Contribution", method = RequestMethod.POST)
 	public String createContribution(@RequestParam(value = "threadId", required = true) String threadId,
 							   @RequestParam(value = "message", required = true) String message,
-			                   HttpSession session,
+							   @RequestParam("name") String name,
+							   @RequestParam("file") CommonsMultipartFile mFile,
+							   HttpSession session,
 			                   ModelMap model)
 	{
 		Date date = new Date();			
@@ -118,8 +122,27 @@ public class InstructorController {
 		String loginuser = (String) session.getAttribute( "loginuser" );
 		User user = userComponent.loadUserByUsername(loginuser);
 		String enteredBy = user.getFirstName() + " " + user.getLastName();
+		
+		//upload file
+		String attachment = "";
+		if (!mFile.isEmpty()) {
+			
+			name = name.substring(name.lastIndexOf("\\")+1);
+			
+			File file = new File("\\" + new Date().getTime() + "_" + name);
+			System.out.println(file.getAbsolutePath());
+			try {
+				mFile.getFileItem().write(file);
+				attachment = file.getAbsolutePath();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+		
+		
 		Contribution contribution = new Contribution(message,
-									    "",
+										attachment,
 									    false,
 									    enteredBy,
 									    loginuser,

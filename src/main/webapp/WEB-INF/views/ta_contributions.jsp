@@ -22,25 +22,37 @@
 	  					</c:if>	
 	  					<br/>
 						<c:out value="${contribution.dateTime}" /><br/>
-						<c:out value="${contribution.enteredBy}" /></td>	
+						<c:out value="${contribution.enteredBy}" />
+						<br/>
+						<c:if test="${contribution.attachment != ''}">
+							<a href="download?fileName=${contribution.attachment}">Attachment</a>
+						</c:if>
+						</td>	
 						<td><c:out value="${contribution.message}" />
 						<br/>
-						<c:out value="${contribution.attachment}" /></td>
+						</td>
 						</tr>
 						</c:forEach>			
 				</table>
                 </div>
                 <c:if test="${threadActive == 'true'}">
                 <form name="formNewThread=" class="form-horizontal"
-			action="<c:url value="/create_ta_Contribution?threadId=${threadId}"/>" method="post">
+			action="<c:url value="/create_ta_Contribution?threadId=${threadId}"/>" method="post" enctype="multipart/form-data">
                 <div class="form-group">                
 				<div class="col-lg-10">					
 						<textarea class="form-control" name="message" id="message" cols="40" rows="6" required ></textarea>
 				</div>
 				
+				<div class="col-sm-6">
+				<br/>
+					<input type="hidden" name="name" />
+					<input name="file" type="file" class="form-control"
+						 />
+				</div>
+				
 				<div class="col-sm-3" >				
 				<br/>
-					<button type="submit" class="btn btn-primary" >Post</button>
+					<button type="submit" class="btn btn-primary" id="upload_submit" >Post</button>
 				</div>				
 			</div>
 		</form>

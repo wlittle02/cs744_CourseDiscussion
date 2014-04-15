@@ -2,6 +2,11 @@ package com.ocds.controllers;
 
 //Test github 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.Principal;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -327,22 +333,22 @@ public class ManagerController {
 		return "redirect:/view_instructor_threads?courseId=" + coursecomponent.getThreadByID(thread_id).getCourse().getId();
 	}
 		
-	@RequestMapping(value = "/upload", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/upload", method = RequestMethod.GET)
 	public String handleFormUpload(HttpServletRequest req) {
 		
 		return "upload";
 	}
 	
+	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public String handleFormUpload(@RequestParam("name") String name,
 			@RequestParam("file") CommonsMultipartFile mFile,
 			HttpServletRequest req) {
-		System.out.println("I was Here");
 		if (!mFile.isEmpty()) {
-			String path = "C:/";
-			System.out.println(path);
-
-			File file = new File(path + new Date().getTime());
+			
+			name = name.substring(name.lastIndexOf("\\")+1);
+			
+			File file = new File("\\" + new Date().getTime() + "_" + name);
 			System.out.println(file.getAbsolutePath());
 			try {
 				mFile.getFileItem().write(file);
@@ -350,11 +356,38 @@ public class ManagerController {
 				e.printStackTrace();
 			}
 
-			return "redirect:";
+			return "redirect:/";
 		} else {
-			return "redirect:";
+			return "redirect:/";
 		}
-	}
+	}*/
+	
+	@RequestMapping(value = "/download", method = RequestMethod.GET)    
+    public void downloadFile(@RequestParam String fileName,
+    		HttpServletResponse response,HttpServletRequest req){    
+        response.setCharacterEncoding("utf-8");    
+        response.setContentType("multipart/form-data");    
+    
+        response.setHeader("Content-Disposition", "attachment;fileName="+fileName.substring(fileName.lastIndexOf("\\")+1));    
+        try {    
+            File file=new File(fileName);    
+            System.out.println(file.getAbsolutePath());    
+            InputStream inputStream=new FileInputStream(file);    
+            OutputStream os=response.getOutputStream();    
+            byte[] b=new byte[1024];    
+            int length;    
+            while((length=inputStream.read(b))>0){    
+                os.write(b,0,length);    
+            }    
+            inputStream.close();    
+        } catch (FileNotFoundException e) {    
+            e.printStackTrace();    
+        } catch (IOException e) {    
+            e.printStackTrace();    
+        }    
+    }   
+	
+	
 	/*@RequestMapping(value = "/summarize_thread", method = RequestMethod.POST)
 	public String summarize_thread(
 			@RequestParam(value = "id", required = true) int id,
