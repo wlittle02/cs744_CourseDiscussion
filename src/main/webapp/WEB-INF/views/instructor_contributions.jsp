@@ -3,9 +3,6 @@
 <%@ page session="false" %>
 
 <script>
-
-
-
 $(document).ready(function(){
 	  $("#upload_submit").click(function(){
 		  document.getElementsByName("name")[0].value = document.getElementsByName("file")[0].value;
@@ -13,7 +10,7 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-	self.setInterval("ajax_refresh()",5000);
+	self.setInterval("ajax_refresh()",1000);
 });
 
 
@@ -34,14 +31,15 @@ function callback(){
         	var xmlDoc=xmlHttp.responseText;
         	//alert(xmlDoc);
         	var size = "${contributions}".split(',').length;
-        	alert(size + "_" + xmlDoc + "_" + document.getElementsByName("ajax_refresh")[0].value);
+        	//alert(size + "_" + xmlDoc + "_" + document.getElementsByName("ajax_refresh")[0].value);
         	
-        	if(size < xmlDoc){
-        		alert("xydata");
-        		document.getElementsByName("ajax_refresh")[0].value = "( "+ xmlDoc-size + " ) New Message";
+        	var num = new Number(xmlDoc) - size;
+        	        	
+        	if(num > 0){
+        		document.getElementsByName("ajax_refresh")[0].value = "( "+ num + " ) New Message";
+        		document.getElementsByName("ajax_refresh")[0].type = "input";
         	}else{
-        		alert("abcd!");
-        		document.getElementsByName("ajax_refresh")[0].value = "No New Message!";
+        		document.getElementsByName("ajax_refresh")[0].type = "hidden";
         	}
         }else{
             alert("AJAX ERROR!");
@@ -55,7 +53,7 @@ function callback(){
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header"><c:out value="${threadName}" /></h1>
-                <input name="ajax_refresh" class="btn btn-primary" value="No New Message"/>
+                <input type="hidden" name="ajax_refresh" class="btn btn-primary" value="No New Message" onclick="window.location.href=''"/>
                 </div>
                 
                 <div>

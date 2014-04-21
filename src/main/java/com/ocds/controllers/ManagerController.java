@@ -392,7 +392,6 @@ public class ManagerController {
     		HttpServletRequest request, HttpServletResponse response){    
            
 		response.setCharacterEncoding("UTF-8");
-		System.out.println(request.getParameter("threadId"));
 		
 		try{
 			
