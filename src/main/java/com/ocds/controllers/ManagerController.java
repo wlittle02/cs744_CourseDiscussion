@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Principal;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,12 +22,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.ocds.Dao.CourseComponent;
 import com.ocds.Domain.Contribution;
 import com.ocds.Domain.Course;
 import com.ocds.users.User;
+
+import flexjson.JSON;
 
 @Controller
 public class ManagerController {
@@ -79,8 +79,7 @@ public class ManagerController {
 			System.out.println(c.getSummaryId());
 			System.out.println(c.getMessage());
 			System.out.println("------");
-		}
-			
+		}	
 			
 		return "redirect:/login";
 	}
@@ -367,7 +366,7 @@ public class ManagerController {
     public void downloadFile(@RequestParam String fileName,
     		HttpServletResponse response,HttpServletRequest req){    
         response.setCharacterEncoding("utf-8");    
-        response.setContentType("multipart/form-data");    
+        response.setContentType("multipart/form-data");
     
         response.setHeader("Content-Disposition", "attachment;fileName="+fileName.substring(fileName.lastIndexOf("\\")+1));    
         try {    
@@ -387,6 +386,57 @@ public class ManagerController {
             e.printStackTrace();    
         }    
     }   
+	
+	@RequestMapping(value = "/ajax_contribution", method = RequestMethod.GET)    
+    public void ajaxContribution (
+    		HttpServletRequest request, HttpServletResponse response){    
+           
+		response.setCharacterEncoding("UTF-8");
+		System.out.println(request.getParameter("threadId"));
+		
+		try{
+			
+			//response.getWriter().write(String.valueOf(coursecomponent.getContributionByThreadID(1L).size()));
+			response.getWriter().write(new Integer(coursecomponent.getContributionByThreadID(1L).size()).toString());
+			
+		}catch(Exception e){
+			
+		}
+		
+		
+		//model.addAttribute("size", coursecomponent.getContributionByThreadID(threadId).size());
+    }
+	
+	/*@RequestMapping(value = "/ajax_contribution", method = RequestMethod.GET) 
+	public void ajaxContribution(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/xml");
+		response.setHeader("Cache-Control", "no-cache");
+		
+		System.out.println("sdfadsfadsfadsf");
+		StringBuffer sb = new StringBuffer();
+
+		sb.append("adfasdf");
+		PrintWriter out = response.getWriter();
+		out.write(sb.toString());
+		out.close();
+	}*/
+	
+	/*@RequestMapping(value = "/ajax_contribution", method = RequestMethod.GET)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/xml");
+		response.setHeader("Cache-Control", "no-cache");
+		
+		StringBuffer sb = new StringBuffer();
+		
+		System.out.println(request.getParameter("threadId"));
+		
+		sb.append(coursecomponent.getContributionByThreadID(Long.parseLong(request.getParameter("threadId"))).size());
+		PrintWriter out = response.getWriter();
+		out.write(sb.toString());
+		out.close();
+	}*/
 	
 	
 	/*@RequestMapping(value = "/summarize_thread", method = RequestMethod.POST)

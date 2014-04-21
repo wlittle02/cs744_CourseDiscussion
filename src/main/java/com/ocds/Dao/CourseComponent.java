@@ -606,6 +606,20 @@ public class CourseComponent {
 		return list_contri;
 	}
 	
+	public List<Contribution> getContributionByThreadID(Long thread_id){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();  
+		List<Contribution> list_contri = entitymanager.createQuery
+				("SELECT contri FROM Contribution contri WHERE "
+						+ "contri.thread.id = ?1", Contribution.class)
+				.setParameter(1, thread_id).getResultList();
+		entitymanager.getTransaction().commit();  
+		entitymanager.close(); 
+		
+		
+		return list_contri;
+	}
+	
 	public Contribution getContributionByID(Long contribution_id){
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();		
