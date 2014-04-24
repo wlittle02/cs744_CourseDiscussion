@@ -13,16 +13,19 @@
 					<th>Date Created</th>
 					<th>Thread Name</th>					
 					<th>Status</th>
+					<th>Summary</th>
 				</tr>	
 				<c:forEach items="${threads}" var="thread">
 					<tr>
 						<td><c:out value="${thread.dateTime}" /></td>
 						<td><a href="view_student_contributions?threadId=${thread.id}"><c:out value="${thread.name}" /></a></td>	
 						<c:if test="${thread.isActive == 'true'}">
-	  							<td>Active</td> 
+	  							<td>Active</td>
+	  							<td>Not Available</td> 
 	  					</c:if> 
 	  					<c:if test="${thread.isActive != 'true'}">
-	  							<td>Inactive</td> 
+	  							<td>Inactive</td>
+	  							<td><a href="summarize_thread?thread_id=${thread.id}">Summary</a></td>
 	  					</c:if>					
 						
 						

@@ -34,6 +34,7 @@
 			</table>
 		</div>
 		<div>
+			
 			<table class="table table-striped table-bordered">
 				<tr>
 					<th>Date Created</th>
@@ -54,7 +55,9 @@
 
 
 		</div>
+		
 		<div>
+		<h3 class="page-header">Important Contributions</h3>
 			<table class="table table-striped table-bordered ">
 
 				<c:forEach items="${contributions}" var="contribution">

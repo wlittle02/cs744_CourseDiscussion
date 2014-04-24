@@ -406,6 +406,16 @@ public class ManagerController {
 		//model.addAttribute("size", coursecomponent.getContributionByThreadID(threadId).size());
     }
 	
+	@RequestMapping(value = "/details_course", method = RequestMethod.GET)
+	public String detailsCourse(
+			@RequestParam(value = "id", required = true) int id, 
+			HttpSession session, ModelMap model) {
+			
+		model.addAttribute("course",coursecomponent.findCourseByID(id));
+		
+		return "instructor_coursedetails";
+	}
+	
 	/*@RequestMapping(value = "/ajax_contribution", method = RequestMethod.GET) 
 	public void ajaxContribution(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
