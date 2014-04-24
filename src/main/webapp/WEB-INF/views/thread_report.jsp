@@ -18,8 +18,8 @@
 					<th colspan="3">Number of Contributions By</th>
 					<tr>
 					<th>Instructor</th>
-					<th>Student</th>
 					<th>TA</th>
+					<th>Student</th>
 				</tr>
 				<c:forEach items="${threads}" var="thread">
 					<tr>
