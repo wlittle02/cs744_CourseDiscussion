@@ -27,6 +27,7 @@ import com.ocds.Dao.CourseComponent;
 import com.ocds.Domain.Contribution;
 import com.ocds.Domain.Course;
 import com.ocds.users.User;
+import com.ocds.users.UserComponent;
 
 import flexjson.JSON;
 
@@ -289,10 +290,25 @@ public class ManagerController {
 	public String summarizeThread(
 			@RequestParam(value = "thread_id", required = true) Long thread_id, 
 			HttpSession session, ModelMap model) {
-			
+		String role = (String) session.getAttribute("userrole");
 		model.addAttribute("thread", coursecomponent.getThreadByID(thread_id));
 		model.addAttribute("contributions",coursecomponent.getContributionForSummary(thread_id));
-		return "instructor_summary";
+		if (role.equals("ROLE_INSTRUCTOR"))
+		{
+			return "instructor_summary";
+		}
+		else if (role.equals("ROLE_STUDENT"))
+		{
+			return "student_summary";
+		}
+		else if (role.equals("ROLE_TA"))
+		{
+			return "ta_summary";
+		}
+		else
+		{
+			return "";
+		}
 	}
 	
 	@RequestMapping(value = "/reorder_contribution", method = RequestMethod.GET)

@@ -81,6 +81,7 @@ public class LoginController {
 			return "login";
 		}
 		session.setAttribute("loginuser" , username);
+		session.setAttribute("userrole", role);
 		
 		if (role.equalsIgnoreCase("ROLE_ADMIN")) {	
             return "manager_home";
