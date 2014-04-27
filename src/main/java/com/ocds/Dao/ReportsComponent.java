@@ -196,7 +196,7 @@ public class ReportsComponent {
 	 * @param pDate starting date
 	 * @return end date
 	 */
-	private Date getEndDate(TimeType pTimeType, Date pDate)
+	public Date getEndDate(TimeType pTimeType, Date pDate)
 	{
 		pDate.setHours(0);
 		pDate.setMinutes(0);

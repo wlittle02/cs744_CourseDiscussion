@@ -54,7 +54,7 @@ public class ReportController {
 	//Begin of Course
 	@RequestMapping(value = "/courses_report", method = RequestMethod.GET)
 	public String courseReport(ModelMap model) {	
-		
+		model.addAttribute("reportActive", false);
 		return "course_report";
 	}
 	@RequestMapping(value = "/get_courses_report", method = RequestMethod.POST)
@@ -63,7 +63,9 @@ public class ReportController {
 									@RequestParam(value = "report_type", required = true) String report_type) {	
 		try{
 			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");			
-			Date dt = formatter.parse(date);			
+			Date dt = formatter.parse(date);	
+			Date enddate = null;
+			String end_date = "";
 			List<Course> courses = coursecomponent.getAllCourses();
 			model.addAttribute("courses",courses);
 			HashMap<Integer,Integer> threadcountmap = new HashMap<Integer,Integer>();
@@ -71,21 +73,52 @@ public class ReportController {
 				int threadcount=0;
 				Course course = courses.get(i);
 				if (report_type.equalsIgnoreCase("Weekly"))
+				{
 					threadcount=reportscomponent.getThreadTotal(TimeType.EWeekly, dt, course.getId());
+					enddate = reportscomponent.getEndDate(TimeType.EWeekly, dt);
+				}
 				if (report_type.equalsIgnoreCase("Monthly"))
+				{
 					threadcount=reportscomponent.getThreadTotal(TimeType.EMonthly, dt, course.getId());
+					enddate = reportscomponent.getEndDate(TimeType.EMonthly, dt);
+				}
 				if (report_type.equalsIgnoreCase("Yearly"))
+				{
 					threadcount=reportscomponent.getThreadTotal(TimeType.EYearly, dt, course.getId());
+					enddate = reportscomponent.getEndDate(TimeType.EYearly, dt);
+				}
 				//List<CThread> threads = threadcomponent.getAllThreads(course.getId());
 //				if (threads.isEmpty())
 //					threadcount=0;
 //				else
 //					threadcount=threads.size();
+				if (enddate != null)
+				{
+					if (enddate.getMonth() < 10)
+					{
+						end_date = "0" + Integer.toString(enddate.getMonth() + 1) + "/";
+					}
+					else
+					{
+						end_date = Integer.toString(enddate.getMonth() + 1) + "/";
+					}
+					if (enddate.getDate() < 10)
+					{
+						end_date = end_date + "0" + Integer.toString(enddate.getDate()) + "/";
+					}
+					else
+					{
+						end_date = end_date + Integer.toString(enddate.getDate()) + "/";
+					}
+					end_date = end_date + Integer.toString(enddate.getYear() + 1900);
+				}
 				threadcountmap.put(course.getId(), threadcount);			
 			}
 			model.addAttribute("threadcountmap",threadcountmap);
 			model.addAttribute("start_date", date);
+			model.addAttribute("end_date", end_date);
 			model.addAttribute("reporttype", report_type);
+			model.addAttribute("reportActive", true);
 		}
 		catch(Exception e){
 			System.out.println(e);
