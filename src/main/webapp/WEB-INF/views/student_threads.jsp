@@ -22,7 +22,7 @@
 							<td><a href="view_student_contributions?threadId=${thread.id}"><c:out value="${thread.name}" /></a></td>
 						</c:if>
 						<c:if test="${thread.isActive == 'false'}">
-							<td><a href="summarize_thread?thread_id=${thread.id}"><c:out value="${thread.name}" /></a></td>
+							<td><c:out value="${thread.name}" /></td>
 						</c:if>
 						<c:if test="${thread.isActive == 'true'}">
 	  							<td>Active</td>
