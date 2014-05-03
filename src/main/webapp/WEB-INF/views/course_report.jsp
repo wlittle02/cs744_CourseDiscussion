@@ -1,12 +1,12 @@
 <%@ include file="manager_base.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page isELIgnored="false"%>
+
 <%@ page import="java.util.*" %>
 
-<%@ page session="false" %>
+<%@ page session="true" %>
 <head>
   <meta charset="utf-8">
-  <title>jQuery UI Datepicker - Default functionality</title>
+  
   <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
@@ -30,9 +30,9 @@
 				<label for="startdate" class="col-sm-2 control-label">Select start date
 					*</label>
 					<div class="col-sm-6">
-<%-- 					<c:if test="${start_date}"> --%>
+
 					<input name="startdate" type="text" id="startdate" class="form-control"  required >
-<%-- 					</c:if> --%>
+
 					</div>								
 			</div>			
 			<div class="form-group">
@@ -68,8 +68,12 @@
 					<button type="submit" class="btn btn-primary">Display Report</button>
 				</div>
 			</div>
+			
 		</form>
-                
+		<br/>
+		
+             <c:if test="${reportActive}">
+             <h3> ${reporttype} Report from ${start_date} to ${end_date} </h3>
                 <div>		
 				<table class="table table-striped table-bordered" >
 					<tr>
@@ -80,7 +84,7 @@
 				<c:forEach items="${courses}" var="course">
 					<tr>
 						<td><c:out value="${course.id_num}" /></td>
-						<td><a href="get_contribution_report?courseId=${course.id}&startdate=${start_date}&report_type=${reporttype}"><c:out value="${course.name}"/></a></td>
+						<td><a href="get_contribution_report?courseId=${course.id}&enddate=${end_date}&startdate=${start_date}&report_type=${reporttype}"><c:out value="${course.name}"/></a></td>
 						<c:forEach items="${threadcountmap}" var="entry">
 							<c:if test="${entry.key == course.id}">
 							<td><c:out value="${entry.value}" /></td>   
@@ -90,6 +94,7 @@
 				</c:forEach>
 				</table>
                 </div>
+                </c:if>
                 <!-- /.col-lg-12 -->
             </div>
  </div>
