@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+<%@ page session="true" %>
 
 <!DOCTYPE html>
 <html>
@@ -34,7 +34,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" >TA</a>
+               <a class="navbar-brand" >TA - <%= (String)session.getAttribute("loginUsersName") %></a>
             </div>
             <!-- /.navbar-header -->
 
