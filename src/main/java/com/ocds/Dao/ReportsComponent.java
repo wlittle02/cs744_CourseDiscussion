@@ -70,6 +70,34 @@ public class ReportsComponent {
 		}
 		return count;
 	}
+	/**
+	 * Gets the total number of contributions for a thread for a particular time range
+	 * @param pTimeType
+	 * @param pDate
+	 * @param pThreadId
+	 * @return Returns the total number of contributions for a thread
+	 * @throws ParseException
+	 */
+	public Integer getImportantContributionTotal(TimeType pTimeType, Date pDate, Long pThreadId, RoleType pRoleType) throws ParseException
+	{
+		Date startDate = formatStartDate(pDate);
+		Date endDate = getEndDate(pTimeType, pDate);
+		Integer count = 0;
+		List<Contribution> contributions = threadComponent.getAllImportantContributions(pThreadId);
+		for (int i = 0; i < contributions.size(); i++)
+		{
+			String username = contributions.get(i).getUsername();
+			if (hasRole(username, pRoleType))
+			{
+				Date contributionDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(contributions.get(i).getDateTime());
+				if (isWithinRange(contributionDate, startDate, endDate))
+				{
+					count++;
+				}
+			}
+		}
+		return count;
+	}
 	
 	/**
 	 * 

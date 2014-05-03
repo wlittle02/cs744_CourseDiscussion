@@ -60,5 +60,13 @@ public class StudentComponent {
 		entitymanager.close(); 
 		return courses;
 	}
+	public boolean checkIfStudentInCourse(Course course, String username){
+		List<Course> courses = getCourseListForStudent(username);
+		for(Course c: courses){
+			if (c.getId()==course.getId())
+				return true;
+		}
+		return false;
+	}
 
 }

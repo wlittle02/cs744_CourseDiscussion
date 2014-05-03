@@ -711,6 +711,14 @@ public class CourseComponent {
 		entitymanager.getTransaction().commit();
 		entitymanager.close();
 	}
+	public boolean checkIfTAForCourse(Course course, String username){
+		List<Course> courses = getAllCoursesforTa(username);
+		for(Course c: courses){
+			if (c.getId()==course.getId())
+				return true;
+		}
+		return false;
+	}
 	
 	//Trival
 	

@@ -128,6 +128,18 @@ public class ThreadComponent {
 		
 		return allContributions;
 	}
+	public List<Contribution> getAllImportantContributions(Long pThreadId)
+	{
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager();
+		entitymanager.getTransaction().begin();
+		
+		List<Contribution> allContributions = entitymanager.createQuery("SELECT contribution FROM Contribution contribution WHERE contribution.thread.id = ?1 and contribution.isImportant=true", Contribution.class).setParameter(1, pThreadId).getResultList();
+		
+		entitymanager.getTransaction().commit();
+		entitymanager.close();		
+		
+		return allContributions;
+	}
 	
 	public Contribution getContribution(Long contributionId)
 	{
