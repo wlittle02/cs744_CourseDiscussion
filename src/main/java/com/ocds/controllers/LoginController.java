@@ -81,8 +81,10 @@ public class LoginController {
 			return "login";
 		}
 		session.setAttribute("loginuser" , username);
-		session.setAttribute("userrole", role);
-		
+
+		session.setAttribute("loginUsersName", user.getFirstName() + " " + user.getLastName());
+		session.setAttribute("loginrole" , role);
+	
 		if (role.equalsIgnoreCase("ROLE_ADMIN")) {	
             return "manager_home";
         }	
@@ -99,6 +101,8 @@ public class LoginController {
 	public String login(ModelMap model,HttpSession session) {
 		
 		session.setAttribute("loginuser" , null);
+		session.setAttribute("loginUsersName" , null);
+		session.setAttribute("loginrole" , null);
 		
 		return "login";
 	}	

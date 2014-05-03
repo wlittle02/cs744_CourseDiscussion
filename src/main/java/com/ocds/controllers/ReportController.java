@@ -31,36 +31,70 @@ import com.ocds.Domain.CThread;
 import com.ocds.Domain.Course;
 import com.ocds.users.Role;
 import com.ocds.users.User;
+import com.ocds.users.UserComponent;
 
 @Controller
 public class ReportController {
-	
-	
+
+
 	@Autowired
 	private CourseComponent coursecomponent;
-	
+
 	@Autowired
 	private ThreadComponent threadcomponent;
-	
+
 	@Autowired
 	private ReportsComponent reportscomponent;
-	
+
+	@Autowired
+	private UserComponent userComponent;
+
 	public  ReportController() { 
 		System.out.println("CREATING Report CONTROLLER");
-		
-		
+
+
 	}
-	
+
 	//Begin of Course
 	@RequestMapping(value = "/courses_report", method = RequestMethod.GET)
-	public String courseReport(ModelMap model) {	
+	public String courseReport(HttpSession session,ModelMap model) {
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Manager role & logged in with Manager role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+			return "login";
+		}		
 		model.addAttribute("reportActive", false);
 		return "course_report";
 	}
 	@RequestMapping(value = "/get_courses_report", method = RequestMethod.POST)
-	public String displaycourseReport(ModelMap model,
-									@RequestParam(value = "startdate", required = true) String date,
-									@RequestParam(value = "report_type", required = true) String report_type) {	
+	public String displaycourseReport(HttpSession session,ModelMap model,
+			@RequestParam(value = "startdate", required = true) String date,
+			@RequestParam(value = "report_type", required = true) String report_type) {	
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Manager role & logged in with Manager role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+			return "login";
+		}		
 		try{
 			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");			
 			Date dt = formatter.parse(date);	
@@ -88,10 +122,10 @@ public class ReportController {
 					enddate = reportscomponent.getEndDate(TimeType.EYearly, dt);
 				}
 				//List<CThread> threads = threadcomponent.getAllThreads(course.getId());
-//				if (threads.isEmpty())
-//					threadcount=0;
-//				else
-//					threadcount=threads.size();
+				//				if (threads.isEmpty())
+				//					threadcount=0;
+				//				else
+				//					threadcount=threads.size();
 				if (enddate != null)
 				{
 					if (enddate.getMonth() < 10)
@@ -126,23 +160,40 @@ public class ReportController {
 		System.out.println("ok");
 		return "course_report";
 	}
-	
+
 	@RequestMapping(value = "/get_contribution_report", method = RequestMethod.GET)
-	public String displayThreadReport(ModelMap model,
-									@RequestParam(value = "courseId", required = true) Integer courseId,
-									@RequestParam(value = "startdate", required = true) String date,
-									@RequestParam(value = "report_type", required = true) String report_type)
+	public String displayThreadReport(HttpSession session,ModelMap model,
+			@RequestParam(value = "courseId", required = true) Integer courseId,
+			@RequestParam(value = "startdate", required = true) String date,
+			@RequestParam(value = "enddate", required = true) String end_date,
+			@RequestParam(value = "report_type", required = true) String report_type)
 	{
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Manager role & logged in with Manager role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+			return "login";
+		}		
 		try
 		{
 			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			
+
 			Date dt = formatter.parse(date);
 			HashMap<Long,ArrayList<Integer>> contcountmap = new HashMap<Long,ArrayList<Integer>>();
 			List<CThread> threads = this.threadcomponent.getAllThreads(courseId);
 			for (int i = 0; i < threads.size(); i++)
 			{
 				Integer totalcount = 0;
+				Integer impcount = 0;
 				Integer instrcount = 0;
 				Integer tacount = 0;
 				Integer studcount = 0;
@@ -150,6 +201,7 @@ public class ReportController {
 				if (report_type.equalsIgnoreCase("Weekly"))
 				{
 					totalcount = reportscomponent.getContributionTotal(TimeType.EWeekly, dt, threads.get(i).getId(), RoleType.EAll);
+					impcount = reportscomponent.getImportantContributionTotal(TimeType.EWeekly, dt, threads.get(i).getId(), RoleType.EAll);
 					instrcount = reportscomponent.getContributionTotal(TimeType.EWeekly, dt, threads.get(i).getId(), RoleType.EInstructor);
 					tacount = reportscomponent.getContributionTotal(TimeType.EWeekly, dt, threads.get(i).getId(), RoleType.ETa);
 					studcount = reportscomponent.getContributionTotal(TimeType.EWeekly, dt, threads.get(i).getId(), RoleType.EStudent);
@@ -157,6 +209,7 @@ public class ReportController {
 				else if (report_type.equalsIgnoreCase("Monthly"))
 				{
 					totalcount = reportscomponent.getContributionTotal(TimeType.EMonthly, dt, threads.get(i).getId(), RoleType.EAll);
+					impcount = reportscomponent.getImportantContributionTotal(TimeType.EMonthly, dt, threads.get(i).getId(), RoleType.EAll);
 					instrcount = reportscomponent.getContributionTotal(TimeType.EMonthly, dt, threads.get(i).getId(), RoleType.EInstructor);
 					tacount = reportscomponent.getContributionTotal(TimeType.EMonthly, dt, threads.get(i).getId(), RoleType.ETa);
 					studcount = reportscomponent.getContributionTotal(TimeType.EMonthly, dt, threads.get(i).getId(), RoleType.EStudent);
@@ -164,19 +217,27 @@ public class ReportController {
 				else if (report_type.equalsIgnoreCase("Yearly"))
 				{
 					totalcount = reportscomponent.getContributionTotal(TimeType.EYearly, dt, threads.get(i).getId(), RoleType.EAll);
+					impcount = reportscomponent.getImportantContributionTotal(TimeType.EYearly, dt, threads.get(i).getId(), RoleType.EAll);
 					instrcount = reportscomponent.getContributionTotal(TimeType.EYearly, dt, threads.get(i).getId(), RoleType.EInstructor);
 					tacount = reportscomponent.getContributionTotal(TimeType.EYearly, dt, threads.get(i).getId(), RoleType.ETa);
 					studcount = reportscomponent.getContributionTotal(TimeType.EYearly, dt, threads.get(i).getId(), RoleType.EStudent);
 				}
 				System.out.println(totalcount);
 				contributionscount.add(0, totalcount);
-				contributionscount.add(1,instrcount);
-				contributionscount.add(2,tacount);
-				contributionscount.add(3,studcount);
+				contributionscount.add(1,impcount);
+				contributionscount.add(2,instrcount);
+				contributionscount.add(3,tacount);
+				contributionscount.add(4,studcount);
+				
 				contcountmap.put(threads.get(i).getId(), contributionscount);
 			}
 			model.addAttribute("threads", threads);
 			model.addAttribute("contcountmap", contcountmap);
+			model.addAttribute("start_date", date);
+			model.addAttribute("end_date", end_date);
+			model.addAttribute("reporttype", report_type);
+			Course course = coursecomponent.findCourseByID(courseId);
+			model.addAttribute("coursename", course.getName());
 		}
 		catch(Exception e)
 		{

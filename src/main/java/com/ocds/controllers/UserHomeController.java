@@ -70,11 +70,31 @@ public class UserHomeController {
 	}*/
 	
 	@RequestMapping(value = "/viewusers")
-	public String viewallusers(ModelMap model, HttpSession session) {
+	public String viewallusers(ModelMap model, HttpSession session,
+			@RequestParam(value = "error", required = false) Boolean error,
+			@RequestParam(value = "message", required = false) String message) {
+		if(error!=null){
+			model.addAttribute("error", true);
+			model.addAttribute("message", message);
+		}
 			
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Manager role & logged in with Manager role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+			return "login";
+		}				
 		List<User> users = userComponent.getAllUsers(); 	
-	 	model.addAttribute("users", users);	 	
-	 	String loginuser = (String) session.getAttribute( "loginuser" );
+	 	model.addAttribute("users", users);	 		 	
 	 	model.addAttribute("loginuser",loginuser);
 	 	return "viewallusers";
 	}
@@ -82,9 +102,30 @@ public class UserHomeController {
 	@RequestMapping(value = "/modify")
 	@Secured(value = { "ROLE_ADMIN" })
 	public String deleteUser(@RequestParam(value = "username", required = true) String username,HttpSession session, ModelMap model) {			
-		User user = userComponent.loadUserByUsername(username);
-		model.addAttribute("user", user);
+		//To check if user is logged in
 		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Manager role & logged in with Manager role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+			return "login";
+		}		
+		// To check if the user selected for modification exists in the system 
+		user = userComponent.loadUserByUsername(username);
+		if (user==null) {
+			model.addAttribute("error", true);
+			model.addAttribute("message", "The selected user has already been removed from the system");
+			return "redirect:/viewusers";
+	    }
+		model.addAttribute("user", user);
+		//String loginuser = (String) session.getAttribute( "loginuser" );
 	 	model.addAttribute("loginuser",loginuser);
 		return "modifyuser";
 	}
@@ -92,7 +133,29 @@ public class UserHomeController {
 	@RequestMapping(value = "/delete")
 	@Secured(value = { "ROLE_ADMIN" })
 	public String modifyUser(@RequestParam(value = "username", required = true) String username, HttpSession session, ModelMap model) {	
-		String loginuser = (String) session.getAttribute( "loginuser" );		
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Manager role & logged in with Manager role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+			return "login";
+		}		
+		// To check if the user selected for modification exists in the system 
+		user = userComponent.loadUserByUsername(username);
+		if (user==null) {
+			model.addAttribute("error", true);
+			model.addAttribute("message", "The selected user has already been removed from the system");
+			return "redirect:/viewusers";
+	    }
+				
 		courseComponent.removeAllCoursesOfStudent(username);
 		courseComponent.removeAllCoursesOfInstructor(username);
 		courseComponent.removeAllCoursesOfTa(username);
@@ -110,17 +173,34 @@ public class UserHomeController {
 			@RequestParam(value = "userroles", required = true) ArrayList<String> userroles, 
 			ModelMap model,HttpSession session) {			
 		System.out.println("updating user");
-		String loginuser = (String) session.getAttribute( "loginuser" );	
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Manager role & logged in with Manager role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+			return "login";
+		}		
+		// To check if the user selected for modification exists in the system 
+		user = userComponent.loadUserByUsername(userName);
+		if (user==null) {
+			model.addAttribute("error", true);
+			model.addAttribute("message", "The selected user has already been removed from the system");
+			return "redirect:/viewusers";
+	    }		
+		// To add ROLE_ADMIN for the manager			
 		if (userName.equalsIgnoreCase(loginuser))
 				userroles.add("ROLE_ADMIN");
+		//To remove associations if the role is removed
 		for(int i=0;i<userroles.size();i++)
-			System.out.println(userroles.get(i));
-		User user =  User.findUserByName(userName);        
-        if (user == null) {        	
-        	model.addAttribute("updateerror", true);
-        	return "redirect:/viewusers";
-            
-        }  
+			System.out.println(userroles.get(i));		  
         if (user.hasRole("ROLE_INSTRUCTOR") && !userroles.contains("ROLE_INSTRUCTOR"))
         	courseComponent.removeAllCoursesOfInstructor(userName);
         if (user.hasRole("ROLE_TA") && !userroles.contains("ROLE_TA"))

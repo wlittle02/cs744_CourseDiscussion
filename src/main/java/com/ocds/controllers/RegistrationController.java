@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,12 +37,27 @@ public class RegistrationController {
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public String register() {
+	public String register(HttpSession session,ModelMap model) {	
+			//To check if user is logged in
+			String loginuser = (String) session.getAttribute( "loginuser" );
+			if (loginuser==null){				
+				model.addAttribute("error", true);
+				model.addAttribute("message", "Login credential not found. Kindly login.");
+				return "login";
+			}
+			// To check if logged in user has Manager role & logged in with Manager role
+			User user = userComponent.loadUserByUsername(loginuser);
+			String loginrole = (String) session.getAttribute( "loginrole" );
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				model.addAttribute("error", true);
+				model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+				return "login";
+			}			
 		return "register";
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String register(
+	public String register(HttpSession session,
 			@RequestParam(value = "firstName", required = true) String firstName, 
 			@RequestParam(value = "lastName", required = true) String lastName, 
 			@RequestParam(value = "userName", required = true) String userName,
@@ -48,14 +65,27 @@ public class RegistrationController {
 			@RequestParam(value = "password", required = true) String password,	
 			@RequestParam(value = "userroles", required = true) ArrayList<String> userroles,
 			ModelMap model) {
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Manager role & logged in with Manager role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+			return "login";
+		}			
 		password = passwordEncoder.encode(password);	
-		User user =  User.findUserByName(userName);
-		
-        
+		// To check of new username already exists
+		user =  User.findUserByName(userName);
         if (user != null) {        	
         	model.addAttribute("regerror", true);
-        	return "register";
-            //throw new UsernameNotFoundException("Username already exists");
+        	return "register";           
         }
         
 		user = new User.Builder()
@@ -70,13 +100,12 @@ public class RegistrationController {
 		ArrayList<Role> userrole= new ArrayList<Role>();
  		for (int i = 0; i < roles.size(); i++)
 		{
-			System.out.println(roles.get(i).getName());
+			//System.out.println(roles.get(i).getName());
 			if (userroles.contains(roles.get(i).getName()))
 			{
 				userrole.add(roles.get(i));
 			}
-		}
- 		
+		} 		
 		userComponent.addUser(user,userrole);
 		model.addAttribute("success", true);
 		

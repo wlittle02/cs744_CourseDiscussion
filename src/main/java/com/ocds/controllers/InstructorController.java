@@ -33,30 +33,66 @@ public class InstructorController {
 	UserComponent userComponent;
 	@Autowired
 	ThreadComponent threadComponent;
-	
+
 	@RequestMapping(value = "/instructor_courses")
 	public String getCoursesForInstructor(ModelMap model, HttpSession session) {
+		//To check if user is logged in
 		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Instructor role & logged in withInstructor role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
+			return "login";
+		}		
+		//String loginuser = (String) session.getAttribute( "loginuser" );
 		User instructor = userComponent.loadUserByUsername(loginuser);
 		List<Course> courses = courseComponent.getAllCoursesforInstructor(instructor);	 	
-	 	
-	 	model.addAttribute("loginuser",loginuser);
-	 	model.addAttribute("courses",courses);
-	 	return "instructor_home";
+
+		model.addAttribute("loginuser",loginuser);
+		model.addAttribute("courses",courses);
+		return "instructor_home";
 	}
-	
+
 	@RequestMapping(value = "/view_instructor_threads", method = RequestMethod.GET)
 	public String viewThread(@RequestParam(value = "courseId", required = true) String courseId,HttpSession session, ModelMap model)
 	{
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Instructor role & logged in with Instructor role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
+			return "login";
+		}	
+		// To check if instructor has access to course
+		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
+		if(!course.getInstructor().getUsername().equalsIgnoreCase(user.getUsername())){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "You have been denied access for this course!! Kindly login again");
+			return "login";
+		}				
 		List<CThread> threads = threadComponent.getAllThreads(Integer.parseInt(courseId));
 		if (threads!=null)
-		model.addAttribute("threads",threads);
-		model.addAttribute("courseId",courseId);
-		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
+			model.addAttribute("threads",threads);
+		model.addAttribute("courseId",courseId);		
 		model.addAttribute("courseName",course.getName());
 		return "instructor_threads";
 	}
-	
+
 	/**
 	 * User to create new threads by the instructor. This action is attached to the submit button
 	 * @param courseId
@@ -67,10 +103,32 @@ public class InstructorController {
 	 */
 	@RequestMapping(value = "/create_instructor_thread", method = RequestMethod.POST)
 	public String createThread(@RequestParam(value = "courseId", required = true) String courseId,
-							   @RequestParam(value = "threadName", required = true) String threadName,
-			                   HttpSession session,
-			                   ModelMap model)
+			@RequestParam(value = "threadName", required = true) String threadName,
+			HttpSession session,
+			ModelMap model)
 	{
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Instructor role & logged in with Instructor role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
+			return "login";
+		}	
+		// To check if instructor has access to course
+		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
+		if(!course.getInstructor().getUsername().equalsIgnoreCase(user.getUsername())){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "You have been denied access for this course!! Kindly login again");
+			return "login";
+		}		
 		Date date = new Date();			
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");	
 		String stringDate = dateFormat.format(date);				
@@ -78,57 +136,103 @@ public class InstructorController {
 			model.addAttribute("error", true);
 			List<CThread> threads = threadComponent.getAllThreads(Integer.parseInt(courseId));
 			model.addAttribute("threads",threads);
-			Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
+			course = courseComponent.findCourseByID(Integer.parseInt(courseId));
 			model.addAttribute("courseName",course.getName());
 			return "instructor_threads";
 		}
 		CThread newThread = new CThread(threadName,
-									    this.courseComponent.findCourseByID(Integer.parseInt(courseId)),
-									    stringDate,
-									    "",
-									    true);
+				this.courseComponent.findCourseByID(Integer.parseInt(courseId)),
+				stringDate,
+				"",
+				true);
 		this.threadComponent.createThread(newThread);
 		List<CThread> threads = threadComponent.getAllThreads(Integer.parseInt(courseId));
 		model.addAttribute("threads",threads);
-		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
+		course = courseComponent.findCourseByID(Integer.parseInt(courseId));
 		model.addAttribute("courseName",course.getName());
 		model.addAttribute("courseId", course.getId());
 		return "instructor_threads";
 	}
-	
+
 	@RequestMapping(value = "/view_instructor_contributions", method = RequestMethod.GET)
 	public String view_contributions(@RequestParam(value = "threadId", required = true) String threadId,HttpSession session, ModelMap model)
 	{
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Instructor role & logged in with Instructor role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
+			return "login";
+		}	
+		// To check if instructor has access to course
+		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
+		Course course = thread.getCourse();
+		if(!course.getInstructor().getUsername().equalsIgnoreCase(user.getUsername())){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "You have been denied access for this course!! Kindly login again");
+			return "login";
+		}		
 		List<Contribution> contributions = threadComponent.getAllContributions(Long.parseLong(threadId));
 		if (contributions!=null)
-		model.addAttribute("contributions",contributions);
+			model.addAttribute("contributions",contributions);
 		model.addAttribute("threadId",threadId);
-		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
+		//CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
 		model.addAttribute("threadActive", thread.getIsActive());
 		return "instructor_contributions";
 	}
 	@RequestMapping(value = "/create_instructor_Contribution", method = RequestMethod.POST)
 	public String createContribution(@RequestParam(value = "threadId", required = true) String threadId,
-							   @RequestParam(value = "message", required = true) String message,
-							   @RequestParam("name") String name,
-							   @RequestParam("file") CommonsMultipartFile mFile,
-							   HttpSession session,
-			                   ModelMap model)
+			@RequestParam(value = "message", required = true) String message,
+			@RequestParam("name") String name,
+			@RequestParam("file") CommonsMultipartFile mFile,
+			HttpSession session,
+			ModelMap model)
 	{
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Instructor role & logged in with Instructor role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
+			return "login";
+		}	
+		// To check if instructor has access to course
+		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
+		Course course = thread.getCourse();
+		if(!course.getInstructor().getUsername().equalsIgnoreCase(user.getUsername())){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "You have been denied access for this course!! Kindly login again");
+			return "login";
+		}		
 		Date date = new Date();			
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");	
 		String stringDate = dateFormat.format(date);
-		String loginuser = (String) session.getAttribute( "loginuser" );
-		User user = userComponent.loadUserByUsername(loginuser);
+		loginuser = (String) session.getAttribute( "loginuser" );
+		user = userComponent.loadUserByUsername(loginuser);
 		String enteredBy = user.getFirstName() + " " + user.getLastName();
-		
+
 		//upload file
 		String attachment = "";
 		if (!mFile.isEmpty()) {
-			
+
 			name = name.substring(name.lastIndexOf("\\")+1);
-			
+
 			File file = new File("\\" + new Date().getTime() + "_" + name);
 			System.out.println(file.getAbsolutePath());
 			try {
@@ -139,40 +243,61 @@ public class InstructorController {
 			}
 
 		}
-		
-		
+
 		Contribution contribution = new Contribution(message,
-										attachment,
-									    false,
-									    enteredBy,
-									    loginuser,
-									    threadComponent.getThread(Long.parseLong(threadId)),
-									    null,									    
-									    stringDate);
-		
+				attachment,
+				false,
+				enteredBy,
+				loginuser,
+				threadComponent.getThread(Long.parseLong(threadId)),
+				null,									    
+				stringDate);
+
 		this.threadComponent.createContribution(contribution);
 		List<Contribution> contributions = threadComponent.getAllContributions(Long.parseLong(threadId));
 		if (contributions!=null)
-		model.addAttribute("contributions",contributions);
+			model.addAttribute("contributions",contributions);
 		model.addAttribute("threadId",threadId);
-		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
+		//CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		model.addAttribute("threadName",thread.getName());
 		model.addAttribute("threadActive", thread.getIsActive());
 		return "instructor_contributions";
 	}
 	@RequestMapping(value = "/set_instructor_Contribution", method = RequestMethod.GET)
 	public String setContribution(@RequestParam(value = "isImportant", required = true) Boolean isImportant,
-							   @RequestParam(value = "contributionId", required = true) Long contributionId,
-			                   HttpSession session,
-			                   ModelMap model)
+			@RequestParam(value = "contributionId", required = true) Long contributionId,
+			HttpSession session,
+			ModelMap model)
 	{
-		
+		//To check if user is logged in
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Instructor role & logged in with Instructor role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
+			return "login";
+		}	
+		// To check if instructor has access to course
 		Contribution contribution = threadComponent.getContribution(contributionId);
-		
+		Course course =contribution.getThread().getCourse();				
+		if(!course.getInstructor().getUsername().equalsIgnoreCase(user.getUsername())){
+			model.addAttribute("error", true);
+			model.addAttribute("message", "You have been denied access for this course!! Kindly login again");
+			return "login";
+		}		
+
+
 		threadComponent.contributionIsImportant(contribution, isImportant);
 		List<Contribution> contributions = threadComponent.getAllContributions(contribution.getThread().getId());
 		if (contributions!=null)
-		model.addAttribute("contributions",contributions);
+			model.addAttribute("contributions",contributions);
 		String threadId = contribution.getThread().getId().toString();
 		model.addAttribute("threadId",threadId);
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
