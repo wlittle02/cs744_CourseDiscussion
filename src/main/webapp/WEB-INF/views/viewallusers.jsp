@@ -1,6 +1,6 @@
 <%@ include file="manager_base.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+<%@ page session="true" %>
 
         <div id="page-wrapper">
             <div class="row">
@@ -10,7 +10,7 @@
      			 		<div class="alert alert-danger">Update Unsucessful. User does not exist in database.</div>
       				  </c:if>    
       				   <c:if test="${error}">
-      					<div class="alert alert-danger">Update Unsucessful.</div>
+      					<div class="alert alert-danger"><c:out value="${message}" /></div>
       					</c:if>    
       					<c:if test="${message}">
 				<c:out value="${message}" />
