@@ -1,14 +1,15 @@
 <%@ include file="manager_base.jsp"%>
-
-
+<%@ page session="true" %>
 
 <!-- Right Block Start -->
 <div id="page-wrapper">
 	<div class="row">
 		<h1 class="page-header">Course List</h1>
 		<div class="col-lg-12" style="max-height : 600px; overflow-y: auto">
-			
-			<table class="table table-striped table-bordered" align="center">
+			 <c:if test="${error}">
+      					<div class="alert alert-danger"><c:out value="${message}" /></div>
+      		 </c:if> 
+			<table class="table table-striped table-bordered" >
 				<tr>
 					<th align="center">Course ID</th>
 					<th>Course Name</th>

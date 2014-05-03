@@ -1,6 +1,6 @@
 <%@ include file="instructor_base.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+
 
 <div id = "page-wrapper">
 	<form name = "threadregister" class = "form-horizontal" role = "form"

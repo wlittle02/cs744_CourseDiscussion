@@ -29,7 +29,10 @@
 	<h1 align="center">Online Course Discussion System</h1>
     <div class="container container1" >    
      <div class="content">     
-    
+     <c:if test="${invalid}">
+      <h3 class="alert alert-danger">${message}</h3>
+      </c:if>    
+          
       <form class="form-signin" action="<c:url value="/login"/>" method="post">
         <h2 class="form-signin-heading">Login</h2>
         <input type="text" class="form-control" placeholder="User Name" autofocus name="username" required>   
