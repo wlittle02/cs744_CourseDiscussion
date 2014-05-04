@@ -1,6 +1,12 @@
 <%@ include file="manager_base.jsp"%>
 <%@ page session="true" %>
-
+ <script language="javascript">
+    function delcfm() {
+        if (!confirm("Delete the Course?")) {
+            window.event.returnValue = false;
+        }
+    }
+</script>
 <!-- Right Block Start -->
 <div id="page-wrapper">
 	<div class="row">
@@ -41,7 +47,7 @@
 						<td><a href="modify_courses?id=${course.id}"> <img
 								border="0" src="<c:url value="/resources/images/pencil_2.png"/>"
 								alt="Delete" width="20" height="20"></a></td>
-						<td><a href="delete_course?id=${course.id}"> <img
+						<td><a href="delete_course?id=${course.id}" onClick="delcfm()"> <img
 								border="0"
 								src="<c:url value="/resources/images/button_cancel.png"/>"
 								alt="Delete" width="20" height="20"></a></td>

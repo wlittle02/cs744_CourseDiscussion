@@ -2,6 +2,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="true" %>
 
+<script language="javascript">
+    function delcfm() {
+        if (!confirm("Delete the User?")) {
+            window.event.returnValue = false;
+        }
+    }
+</script>
+
+
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
@@ -87,7 +96,7 @@
 						<td><a href="modify?username=${user.username}">
 						<img border="0" src="<c:url value="/resources/images/pencil_2.png"/>" alt="Delete" width="20" height="20"></a></td>
 						<c:if test="${user.username != loginuser}">
-							<td><a href="delete?username=${user.username}">
+							<td><a href="delete?username=${user.username}" onClick="delcfm()">
 							<img border="0" src="<c:url value="/resources/images/button_cancel.png"/>" alt="Delete" width="20" height="20"></a></td>
 						</c:if>
 					</tr>
