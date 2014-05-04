@@ -20,16 +20,15 @@ $(document).ready(function(){
     }else if(window.ActiveXObject){
         xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
     }
-	xmlHttp.open("GET","http://localhost:8080/projectcs744/ajax_contribution?threadId=${threadId}",true);
+	xmlHttp.open("GET","http://138.49.101.82:443/projectcs744/ajax_contribution?threadId=${threadId}",true);
 	xmlHttp.onreadystatechange=callback;
 	xmlHttp.send();
 }
 
 function callback(){
     if(xmlHttp.readyState==4){
-        if(xmlHttp.status==200){
+        if(xmlHttp.status==200 || xmlHttp.status == 0){
         	var xmlDoc=xmlHttp.responseText;
-        	//alert(xmlDoc);
         	var size = "${contributions}".split(',').length;
         	//alert(size + "_" + xmlDoc + "_" + document.getElementsByName("ajax_refresh")[0].value);
         	
@@ -42,7 +41,6 @@ function callback(){
         		document.getElementsByName("ajax_refresh")[0].type = "hidden";
         	}
         }else{
-            alert("AJAX ERROR!");
         }    
     }
 } 
@@ -53,7 +51,7 @@ function callback(){
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header"><c:out value="${threadName}" /></h1>
-                <input type="hidden" name="ajax_refresh" class="btn btn-primary" value="No New Message" onclick="window.location.href=''"/>
+                <input type="hidden" name="ajax_refresh" class="btn btn-primary" value="No New Message" onclick="window.location.href='/projectcs744/view_instructor_contributions?threadId=${threadId}'"/>
                 </div>
                 
                 <div>

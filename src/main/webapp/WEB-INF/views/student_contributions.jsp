@@ -19,7 +19,7 @@ $(document).ready(function(){
     }else if(window.ActiveXObject){
         xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
     }
-	xmlHttp.open("GET","http://localhost:8080/projectcs744/ajax_contribution?threadId=${threadId}",true);
+	xmlHttp.open("GET","http://138.49.101.82:443/projectcs744/ajax_contribution?threadId=${threadId}",true);
 	xmlHttp.onreadystatechange=callback;
 	xmlHttp.send();
 }

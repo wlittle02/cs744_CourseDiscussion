@@ -20,14 +20,14 @@ $(document).ready(function(){
     }else if(window.ActiveXObject){
         xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
     }
-	xmlHttp.open("GET","http://localhost:8080/projectcs744/ajax_contribution?threadId=${threadId}",true);
+	xmlHttp.open("GET","http://138.49.101.82:443/projectcs744/ajax_contribution?threadId=${threadId}",true);
 	xmlHttp.onreadystatechange=callback;
 	xmlHttp.send();
 }
 
 function callback(){
     if(xmlHttp.readyState==4){
-        if(xmlHttp.status==200){
+        if(xmlHttp.status==200 || xmlHttp.status ==0){
         	var xmlDoc=xmlHttp.responseText;
         	//alert(xmlDoc);
         	var size = "${contributions}".split(',').length;
