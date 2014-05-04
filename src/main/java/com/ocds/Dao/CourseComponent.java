@@ -295,6 +295,8 @@ public class CourseComponent {
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();
 		
+		try
+		{
 		List<User> students = entitymanager.createQuery
 				("SELECT user FROM User user WHERE id IN ?1", User.class)
 				.setParameter(1, student_ids).getResultList();
@@ -312,6 +314,11 @@ public class CourseComponent {
 		
 		
 		entitymanager.getTransaction().commit();
+		}
+		catch (Exception e)
+		{
+			// Do Nothing
+		}
 		entitymanager.close();
 		
 	}
@@ -504,23 +511,31 @@ public class CourseComponent {
 		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
 		entitymanager.getTransaction().begin();
 		
-		List<User> tas = entitymanager.createQuery
-				("SELECT user FROM User user WHERE id IN ?1", User.class)
-				.setParameter(1, ta_ids).getResultList();
-		
-		Course course = entitymanager.createQuery
-				("SELECT course FROM Course course where course.id = ?1", Course.class)
-				.setParameter(1, course_id).getResultList().get(0);
-		
-		for(User u : tas){
-			entitymanager.refresh(u);
-			course.getTAs().add(u);
+		try
+		{
+			List<User> tas = entitymanager.createQuery
+					("SELECT user FROM User user WHERE id IN ?1", User.class)
+					.setParameter(1, ta_ids).getResultList();
+			
+			Course course = entitymanager.createQuery
+					("SELECT course FROM Course course where course.id = ?1", Course.class)
+					.setParameter(1, course_id).getResultList().get(0);
+			
+			for(User u : tas){
+				entitymanager.refresh(u);
+				course.getTAs().add(u);
+			}
+			
+			entitymanager.merge(course);
+			
+			
+			entitymanager.getTransaction().commit();
+		}
+		catch (Exception e)
+		{
+			// Do Nothing
 		}
 		
-		entitymanager.merge(course);
-		
-		
-		entitymanager.getTransaction().commit();
 		entitymanager.close();
 		
 	}

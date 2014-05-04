@@ -46,7 +46,14 @@ public class TaController {
 		// To check if logged in user has TA role & logged in with TA role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+		try
+		{
+			if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with TA role or contact Manager for access");
 			return "login";
@@ -70,7 +77,14 @@ public class TaController {
 		// To check if logged in user has TA role & logged in with TA role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+		try
+		{
+			if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with TA role or contact Manager for access");
 			return "login";
@@ -105,11 +119,18 @@ public class TaController {
 		// To check if logged in user has TA role & logged in with TA role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+		try
+		{
+			if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with TA role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if TA has access to course
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		Course course = courseComponent.findCourseByID(thread.getCourse().getId());					
@@ -145,11 +166,18 @@ public class TaController {
 		// To check if logged in user has TA role & logged in with TA role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+		try
+		{
+			if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with TA role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if TA has access to course
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		Course course = courseComponent.findCourseByID(thread.getCourse().getId());					
@@ -218,11 +246,18 @@ public class TaController {
 		// To check if logged in user has TA role & logged in with TA role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+		try
+		{
+			if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with TA role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if TA has access to course
 		Contribution contribution = threadComponent.getContribution(contributionId);
 		Course course =contribution.getThread().getCourse();				

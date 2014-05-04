@@ -109,11 +109,18 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
-		}		
+		}	
 		model.addAttribute("years",YEARS);
 		model.addAttribute("sections",SECTIONS);
 		model.addAttribute("status",STATUS);
@@ -144,7 +151,14 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
@@ -185,7 +199,14 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
@@ -209,11 +230,18 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
-		}		
+		}	
 		Course course = coursecomponent.findCourseByID(id);
 		if (course==null) {
 			model.addAttribute("error", true);
@@ -264,7 +292,14 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
@@ -294,11 +329,18 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
-		}		
+		}
 		Course course = coursecomponent.findCourseByID(id);
 		if (course==null) {
 			model.addAttribute("error", true);
@@ -327,7 +369,14 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
@@ -360,11 +409,18 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
-		}		
+		}
 		//To check if course exists
 		Course course = coursecomponent.findCourseByID(id);
 		if (course==null) {
@@ -394,11 +450,18 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
-		}		
+		}
 		//To check if course exists
 		Course course = coursecomponent.findCourseByID(id);
 		if (course==null) {
@@ -426,11 +489,18 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
-		}		
+		}
 		//To check if course exists
 		Course course = coursecomponent.findCourseByID(id);
 		if (course==null) {
@@ -459,11 +529,18 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
-		}		
+		}
 		//To check if course exists
 		Course course = coursecomponent.findCourseByID(id);
 		if (course==null) {
@@ -493,11 +570,18 @@ public class ManagerController {
 		// To check if logged in user has Manager role & logged in with Manager role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+		try
+		{
+			if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
 			return "login";
-		}		
+		}
 		//To check if course exists
 		Course course = coursecomponent.findCourseByID(id);
 		if (course==null) {
