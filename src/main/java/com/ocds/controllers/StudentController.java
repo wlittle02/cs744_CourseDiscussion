@@ -58,7 +58,14 @@ public class StudentController {
 		// To check if logged in user has student role & logged in with student role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_STUDENT") || !loginrole.equalsIgnoreCase("ROLE_STUDENT") ){
+		try
+		{
+			if (!user.hasRole("ROLE_STUDENT") || !loginrole.equalsIgnoreCase("ROLE_STUDENT") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Student role or contact Manager for access");
 			return "login";
@@ -82,11 +89,18 @@ public class StudentController {
 		// To check if logged in user has student role & logged in with student role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_STUDENT") || !loginrole.equalsIgnoreCase("ROLE_STUDENT") ){
+		try
+		{
+			if (!user.hasRole("ROLE_STUDENT") || !loginrole.equalsIgnoreCase("ROLE_STUDENT") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Student role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if student has access to course
 		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));					
 		if(!studentcomponent.checkIfStudentInCourse(course, loginuser)){
@@ -116,11 +130,18 @@ public class StudentController {
 		// To check if logged in user has student role & logged in with student role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_STUDENT") || !loginrole.equalsIgnoreCase("ROLE_STUDENT") ){
+		try
+		{
+			if (!user.hasRole("ROLE_STUDENT") || !loginrole.equalsIgnoreCase("ROLE_STUDENT") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Student role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if student has access to course			
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		Course course = courseComponent.findCourseByID(thread.getCourse().getId());	
@@ -156,7 +177,14 @@ public class StudentController {
 		// To check if logged in user has student role & logged in with student role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_STUDENT") || !loginrole.equalsIgnoreCase("ROLE_STUDENT") ){
+		try
+		{
+			if (!user.hasRole("ROLE_STUDENT") || !loginrole.equalsIgnoreCase("ROLE_STUDENT") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Student role or contact Manager for access");
 			return "login";
