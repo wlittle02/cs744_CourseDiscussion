@@ -46,11 +46,19 @@ public class InstructorController {
 		// To check if logged in user has Instructor role & logged in withInstructor role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+		try
+		{
+			if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
 			return "login";
-		}		
+		}	
+			
 		//String loginuser = (String) session.getAttribute( "loginuser" );
 		User instructor = userComponent.loadUserByUsername(loginuser);
 		List<Course> courses = courseComponent.getAllCoursesforInstructor(instructor);	 	
@@ -73,11 +81,18 @@ public class InstructorController {
 		// To check if logged in user has Instructor role & logged in with Instructor role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+		try
+		{
+			if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if instructor has access to course
 		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
 		if(!course.getInstructor().getUsername().equalsIgnoreCase(user.getUsername())){
@@ -117,11 +132,18 @@ public class InstructorController {
 		// To check if logged in user has Instructor role & logged in with Instructor role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+		try
+		{
+			if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if instructor has access to course
 		Course course = courseComponent.findCourseByID(Integer.parseInt(courseId));
 		if(!course.getInstructor().getUsername().equalsIgnoreCase(user.getUsername())){
@@ -167,11 +189,18 @@ public class InstructorController {
 		// To check if logged in user has Instructor role & logged in with Instructor role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+		try
+		{
+			if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if instructor has access to course
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		Course course = thread.getCourse();
@@ -207,11 +236,18 @@ public class InstructorController {
 		// To check if logged in user has Instructor role & logged in with Instructor role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+		try
+		{
+			if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if instructor has access to course
 		CThread thread = threadComponent.getThread(Long.parseLong(threadId));
 		Course course = thread.getCourse();
@@ -279,11 +315,18 @@ public class InstructorController {
 		// To check if logged in user has Instructor role & logged in with Instructor role
 		User user = userComponent.loadUserByUsername(loginuser);
 		String loginrole = (String) session.getAttribute( "loginrole" );
-		if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+		try
+		{
+			if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+				throw new Exception ("Opps");
+			}
+		}
+		catch (Exception e)
+		{
 			model.addAttribute("error", true);
 			model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
 			return "login";
-		}	
+		}
 		// To check if instructor has access to course
 		Contribution contribution = threadComponent.getContribution(contributionId);
 		Course course =contribution.getThread().getCourse();				
