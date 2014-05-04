@@ -17,13 +17,16 @@
 				<table class="table table-striped table-bordered" >
 					<tr>
 					<th>Course Number</th>
-					<th>Course Name Name</th>					
+					<th>Course Name</th>
+					<th>Section</th>
+					<th>Semester</th>					
 				</tr>
 				<c:forEach items="${courses}" var="course">
 					<tr>
 						<td><c:out value="${course.id_num}" /></td>
 						<td><a href="view_ta_threads?courseId=${course.id}"><c:out value="${course.name}"/></a></td>
-						
+						<td><c:out value="${course.section_num}" /></td>
+						<td><c:out value="${course.semester} - ${course.year}" /></td>
 					</tr>
 				</c:forEach>
 				</table>
