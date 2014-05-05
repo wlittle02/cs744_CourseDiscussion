@@ -603,6 +603,63 @@ public class ManagerController {
 			HttpSession session, ModelMap model) {
 
 		String role = (String) session.getAttribute("loginrole");
+		String loginuser = (String) session.getAttribute( "loginuser" );
+		if (loginuser==null){				
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Login credential not found. Kindly login.");
+			return "login";
+		}
+		// To check if logged in user has Manager role & logged in with Manager role
+		User user = userComponent.loadUserByUsername(loginuser);
+		String loginrole = (String) session.getAttribute( "loginrole" );
+		try
+		{
+			if (role.equals("ROLE_INSTRUCTOR"))
+			{
+				if (!user.hasRole("ROLE_INSTRUCTOR") || !loginrole.equalsIgnoreCase("ROLE_INSTRUCTOR") ){
+					throw new Exception ("Opps");
+				}
+			}
+			else if (role.equals("ROLE_STUDENT"))
+			{
+				if (!user.hasRole("ROLE_STUDENT") || !loginrole.equalsIgnoreCase("ROLE_STUDENT") ){
+					throw new Exception ("Opps");
+				}
+			}
+			else if (role.equals("ROLE_TA"))
+			{
+				if (!user.hasRole("ROLE_TA") || !loginrole.equalsIgnoreCase("ROLE_TA") ){
+					throw new Exception ("Opps");
+				}
+			}
+			else
+			{
+				if (!user.hasRole("ROLE_ADMIN") || !loginrole.equalsIgnoreCase("ROLE_ADMIN") ){
+					throw new Exception ("Opps");
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			model.addAttribute("error", true);
+			if (role.equals("ROLE_INSTRUCTOR"))
+			{
+				model.addAttribute("message", "Denied access for this operation!! Kindly login with Instructor role or contact Manager for access");
+			}
+			else if (role.equals("ROLE_STUDENT"))
+			{
+				model.addAttribute("message", "Denied access for this operation!! Kindly login with Student role or contact Manager for access");
+			}
+			else if (role.equals("ROLE_TA"))
+			{
+				model.addAttribute("message", "Denied access for this operation!! Kindly login with TA role or contact Manager for access");
+			}
+			else
+			{
+				model.addAttribute("message", "Denied access for this operation!! Kindly login with Manager role or contact Manager for access");
+			}
+			return "login";
+		}
 
 		model.addAttribute("thread", coursecomponent.getThreadByID(thread_id));
 		model.addAttribute("contributions",coursecomponent.getContributionForSummary(thread_id));
