@@ -154,14 +154,14 @@ public class InstructorController {
 		Date date = new Date();			
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");	
 		String stringDate = dateFormat.format(date);				
-		if (threadComponent.findThreadByName(threadName)!=null){
+		/*if (threadComponent.findThreadByName(threadName)!=null){
 			model.addAttribute("error", true);
 			List<CThread> threads = threadComponent.getAllThreads(Integer.parseInt(courseId));
 			model.addAttribute("threads",threads);
 			course = courseComponent.findCourseByID(Integer.parseInt(courseId));
 			model.addAttribute("courseName",course.getName());
 			return "instructor_threads";
-		}
+		}*/
 		CThread newThread = new CThread(threadName,
 				this.courseComponent.findCourseByID(Integer.parseInt(courseId)),
 				stringDate,
