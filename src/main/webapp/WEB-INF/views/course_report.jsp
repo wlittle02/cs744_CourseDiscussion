@@ -39,7 +39,7 @@
 				<label for="report_type" class="col-sm-2 control-label">Select Report Type
 					*</label>
 				<div class="col-sm-6">
-					<select name="report_type" id="report_type" class="form-control" required>
+					<select name="report_type" id="report_type" class="form-control" required>							
 						<c:if test="${reporttype == 'Weekly'}">
 						<option selected>Weekly</option>
 						</c:if>
@@ -58,8 +58,8 @@
 						<c:if test="${reporttype != 'Weekly'}">
 						<option>Yearly</option>
 						</c:if>
-						<option>Monthly</option>
-						<option>Yearly</option>						
+						<!-- <option>Monthly</option>
+						<option>Yearly</option>		 -->				
 					</select>
 				</div>
 			</div>
@@ -79,12 +79,14 @@
 					<tr>
 					<th>Course Number</th>
 					<th>Course Name</th>
+					<th>Section</th>
 					<th>No. of Threads</th>					
 				</tr>
 				<c:forEach items="${courses}" var="course">
 					<tr>
 						<td><c:out value="${course.id_num}" /></td>
 						<td><a href="get_contribution_report?courseId=${course.id}&enddate=${end_date}&startdate=${start_date}&report_type=${reporttype}"><c:out value="${course.name}"/></a></td>
+						<td><c:out value="${course.section_num}" />
 						<c:forEach items="${threadcountmap}" var="entry">
 							<c:if test="${entry.key == course.id}">
 							<td><c:out value="${entry.value}" /></td>   
