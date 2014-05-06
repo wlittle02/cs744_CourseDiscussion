@@ -735,6 +735,30 @@ public class CourseComponent {
 		return false;
 	}
 	
+	public List<Course> getAllCoursesforStudent(String username){
+		EntityManager entitymanager = entitymanagerfactory.createEntityManager(); 
+		entitymanager.getTransaction().begin();  
+		List<Course> courses =  entitymanager.createQuery(
+				"SELECT course FROM Course course JOIN course.students cs "
+				+ "where cs.username = ?1", Course.class)
+				.setParameter(1, username)
+				.getResultList();
+		entitymanager.getTransaction().commit();  
+		entitymanager.close(); 
+		
+		
+		return courses;
+	}
+	
+	public boolean checkIfStudentForCourse(Course course, String username){
+		List<Course> courses = getAllCoursesforStudent(username);
+		for(Course c: courses){
+			if (c.getId()==course.getId())
+				return true;
+		}
+		return false;
+	}
+	
 	//Trival
 	
 }

@@ -42,7 +42,7 @@ function callback(){
         		document.getElementsByName("ajax_refresh")[0].type = "hidden";
         	}
         }else{
-            alert("AJAX ERROR!");
+           
         }    
     }
 } 

@@ -59,7 +59,7 @@ public class ReportsComponent {
 		for (int i = 0; i < contributions.size(); i++)
 		{
 			String username = contributions.get(i).getUsername();
-			if (hasRole(username, pRoleType))
+			if (hasRole(username, pRoleType, threadComponent.getThread(pThreadId).getCourse().getId()))
 			{
 				Date contributionDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(contributions.get(i).getDateTime());
 				if (isWithinRange(contributionDate, startDate, endDate))
@@ -159,6 +159,35 @@ public class ReportsComponent {
 	 * @param pRoleType Role Type to be searched
 	 * @return Boolean result if the user has the targeted role type
 	 */
+	
+
+	
+	private Boolean hasRole(String pUserName, RoleType pRoleType, int courseid)
+	{
+		System.out.println(" I swafadskfjadslfkjadf;ldaskjfdsa;l");
+		Boolean result = false;
+		User user = userComponent.loadUserByUsername(pUserName);
+		if (user == null)
+			return result;
+		switch(pRoleType)
+		{
+		case ETa:
+			result =  courseComponent.checkIfTAForCourse(courseComponent.findCourseByID(courseid), pUserName);
+			break;
+		case EStudent:
+			result = courseComponent.checkIfStudentForCourse(courseComponent.findCourseByID(courseid), pUserName);
+			break;
+		case EInstructor:
+			result = courseComponent.findCourseByID(courseid).getInstructor().getUsername().equals(pUserName);
+			break;
+		default:
+			result = true;
+			break;
+		}
+		return result;
+	}
+	
+	
 	private Boolean hasRole(String pUserName, RoleType pRoleType)
 	{
 		Boolean result = false;
@@ -167,11 +196,11 @@ public class ReportsComponent {
 			return result;
 		switch(pRoleType)
 		{
-		case EStudent:
-			result = user.hasRole(Role.roleNames[2]);
-			break;
 		case ETa:
 			result = user.hasRole(Role.roleNames[3]);
+			break;
+		case EStudent:
+			result = user.hasRole(Role.roleNames[2]);
 			break;
 		case EInstructor:
 			result = user.hasRole(Role.roleNames[1]);
